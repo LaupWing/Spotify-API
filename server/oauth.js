@@ -1,14 +1,13 @@
 const express = require('express')
 const request = require('request')
 const querystring = require('querystring')
-
-let app = express()
+const router = express.Router()
 
 let redirect_uri = 
   process.env.REDIRECT_URI || 
-  'http://localhost:8888/callback'
+  'http://localhost:3000/spotify/callback'
 
-app.get('/login', function(req, res) {
+router.get('/spotify/login', function(req, res) {
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -18,7 +17,7 @@ app.get('/login', function(req, res) {
     }))
 })
 
-app.get('/callback', function(req, res) {
+router.get('/spotify/callback', function(req, res) {
   let code = req.query.code || null
   let authOptions = {
     url: 'https://accounts.spotify.com/api/token',
@@ -41,6 +40,7 @@ app.get('/callback', function(req, res) {
   })
 })
 
-let port = process.env.PORT || 8888
-console.log(`Listening on port ${port}. Go /login to initiate authentication flow.`)
-app.listen(port)
+const port = process.env.PORT || 3000
+// console.log(`Listening on port ${port}. Go /login to initiate authentication flow.`)
+// router.listen(port)
+module.exports = router
