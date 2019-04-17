@@ -2,7 +2,7 @@ const express = require('express')
 const request = require('request')
 const querystring = require('querystring')
 const router = express.Router()
-
+require("dotenv/config")
 let redirect_uri = 
   process.env.REDIRECT_URI || 
   'http://localhost:3000/spotify/callback'
@@ -35,12 +35,9 @@ router.get('/spotify/callback', function(req, res) {
   }
   request.post(authOptions, function(error, response, body) {
     var access_token = body.access_token
-    let uri = process.env.FRONTEND_URI || 'http://localhost:3000'
+    let uri = process.env.FRONTEND_URI || 'http://localhost:3000/game'
     res.redirect(uri + '?access_token=' + access_token)
   })
 })
 
-const port = process.env.PORT || 3000
-// console.log(`Listening on port ${port}. Go /login to initiate authentication flow.`)
-// router.listen(port)
 module.exports = router
