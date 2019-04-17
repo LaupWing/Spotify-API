@@ -1,0 +1,26 @@
+{
+  "name": "SpotifyGame",
+  "version": "1.0.0",
+  "description": "A game which the players have guess the song. The first person who has guessed the song wins the round. Every game has 10 rounds.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LaupWing/Spotify-API.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LaupWing/Spotify-API/issues"
+  },
+  "homepage": "https://github.com/LaupWing/Spotify-API#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "querystring": "^0.2.0",
+    "request": "^2.88.0"
+  }
+}
