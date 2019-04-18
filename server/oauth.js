@@ -2,7 +2,10 @@ const express = require('express')
 const request = require('request')
 const querystring = require('querystring')
 const router = express.Router()
+const session = require('express-session')
 require("dotenv/config")
+
+
 let redirect_uri = 
   process.env.REDIRECT_URI || 
   'http://localhost:3000/spotify/callback'
@@ -27,7 +30,7 @@ router.get('/spotify/callback', function(req, res) {
       grant_type: 'authorization_code'
     },
     headers: {
-      'Authorization': 'Basic ' + (new Buffer(
+      'Authorization': 'Basic ' + (new Buffer.from(
         process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET
       ).toString('base64'))
     },
@@ -36,7 +39,8 @@ router.get('/spotify/callback', function(req, res) {
   request.post(authOptions, function(error, response, body) {
     var access_token = body.access_token
     let uri = process.env.FRONTEND_URI || 'http://localhost:3000/game'
-    res.redirect(uri + '?access_token=' + access_token)
+    req.session.acces_token = access_token
+    res.redirect(uri)
   })
 })
 
