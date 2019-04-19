@@ -40,7 +40,7 @@ router.get('/spotify/callback', function(req, res) {
     var access_token = body.access_token
     let uri = process.env.FRONTEND_URI || 'http://localhost:3000/game'
     req.session.acces_token = access_token
-    res.redirect(uri)
+    res.redirect(uri + '?acces_token=' + access_token)
   })
 })
 
