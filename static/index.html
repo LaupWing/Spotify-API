@@ -5,8 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Spotify Game</title>
+    <link rel="stylesheet" href="./styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script src="./scripts/main.js" defer></script>
 </head>
 <body>
-    <a href="http://localhost:3000/spotify/login">Klik hier to connect  with spotify</a>
+    <div class="container" id="container">
+        <div class="intro-container">
+            <div class="intro">
+                <h1>Spotify Game</h1>
+                <p>Can you guess the song?</p>
+            </div>
+        </div>
+        <div class="login-container">
+            <div class="login">
+                <svg id="face" viewBox="0 0 595.28 222">
+                    <defs>
+                        <style>
+                            .cls-1{fill:#1d1d1b;}
+                            .cls-2{fill:#fff;}
+                        </style>
+                    </defs>
+                    <title>face</title>
+                    <g id="Left_Eye" data-name="Left Eye">
+                        <circle class="cls-1" cx="79.34" cy="74.66" r="31"/>
+                        <circle class="cls-2" cx="79.34" cy="74.66" r="12.27"/>
+                        <circle class="cls-2" cx="67.07" cy="83.34" r="7.02"/></g>
+                        <g id="Right_Eye" data-name="Right Eye">
+                            <circle class="cls-1" cx="515.94" cy="74.66" r="31"/>
+                            <circle class="cls-2" cx="515.94" cy="74.66" r="12.27"/>
+                            <circle class="cls-2" cx="503.66" cy="83.34" r="7.02"/>
+                        </g>
+                        <path id="Mouth" class="cls-1" d="M338,133.66c0,.18,0,.36,0,.54a48.25,48.25,0,0,1-96.49,0c0-.18,0-.36,0-.54a10.53,10.53,0,0,1,21.06,0,27.19,27.19,0,1,0,54.38,0h0a10.53,10.53,0,0,1,21.06,0Z"/>
+                </svg>
+                <a href="http://localhost:3000/spotify/login" class="ghost">Login</a>
+            </div>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Login...</h1>
+                    <p>In order to play this game you need to login with your Spotify game</p>
+                    <button id="idontWanna">i dont wanna</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Mate!</h1>
+                    <p>Click the button below to play the game</p>
+                    <button id="clickMe">click me</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

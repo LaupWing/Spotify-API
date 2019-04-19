@@ -1,0 +1,213 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* Global
+------------------------ */
+body{
+    background: #f6f5f7;
+    background:
+        linear-gradient(
+        rgba(255, 255, 255,.85)
+        ,rgba(255,255,255,.85)), 
+        url('../images/bg.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1{
+    font-weight: bold;
+}
+
+p{
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing: .5px;
+    margin: 20px 0 30px;
+}
+a{
+    text-decoration: none;
+}
+button, a{
+    border-radius: 20px;
+    background: #1DB954;
+    border: solid 1px #1DB954;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: white;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: .25s ease-in, transform 80ms ease-in;
+}
+
+button.ghost, a.ghost{
+    background: transparent;
+    border-color: white;
+}
+button:active{
+    transform: scale(0.95);
+}
+
+button:focus{
+    outline: none;
+}
+
+button:hover, a.ghost:hover{
+    background: white;
+    color: black;
+}
+
+.container{
+    background: #1DB954;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 10px 10px rgba(0,0,0,0.22);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 480px;
+}
+
+/* Intro
+------------------------ */
+.intro-container .intro{
+    background: #1DB954;
+    text-align: left;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 60px;
+    height: 100%;
+}
+.intro-container .intro p{
+    margin-top: 5px;
+    color: black;
+}
+
+.intro-container, .login-container{
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+    transition-delay: 0.6s;
+}
+
+.intro-container{
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+/* Login
+------------------------ */
+.login-container{
+    left: 0;
+    width: 50%;
+    z-index: 1;
+    opacity: 0;
+}
+.login-container .login{
+    height: 100%;
+    background: #1DB954;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#face{
+    position: absolute;
+    top: 0;        
+    transition-delay: 1s;          
+}
+/* Overlay
+------------------------ */
+.overlay-container{
+    position: absolute;
+    top:0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+.overlay{
+    background: #212121;
+    background: linear-gradient(to right, #121212, #212121) no-repeat 0 0 / cover;
+    color: white;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-panel{
+    position: absolute;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 40px;
+    height: 100%;
+    width: 50%;
+    text-align: center;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-right{
+    right: 0;
+    transform: translateX(0);
+}
+
+.overlay-left{
+    transform: translateX(-20%);
+}
+
+/* Animation */
+
+/* Move to the right */
+.container.right-panel-active .intro-container{
+    transform: translateX(100%);
+}
+
+/* Move to the left */
+.container.right-panel-active .overlay-container{
+    transform: translateX(-100%);
+}
+
+/* Bring over */
+.container.right-panel-active .login-container{
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+}
+
+/* Move back */
+.container.right-panel-active .overlay{
+    transform: translateX(50%);
+}
+
+.container.right-panel-active .overlay-left{
+    transform: translateX(0);
+}
+.container.right-panel-active .overlay-right{
+    transform: translateX(20%);
+}
