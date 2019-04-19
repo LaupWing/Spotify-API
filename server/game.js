@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const fetch = require('node-fetch')
-router.get("/", (req,res)=>{
+router.get("/", async (req,res)=>{
     console.log('This is the acces token=',req.session.acces_token)
     const playlist_id = '2f6tXtN0XesjONxicAzMIw'
     console.log(req.session.acces_token)
@@ -11,9 +11,9 @@ router.get("/", (req,res)=>{
         }
     })
     .then(response=> response.json())
-    .then(data=>console.log(data))
+    .then(data=>console.log(data.items))
 
-    res.send("game page")
+    res.render("game")
 })
 
 module.exports = router
