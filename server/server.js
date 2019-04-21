@@ -6,7 +6,8 @@ const oauth = require("./oauth")
 const session = require('express-session')
 const server = app.listen(port, ()=>console.log(`Server is listening to port ${port}`))
 const io = require('socket.io')(server)
-const users = []
+let users = []
+const randomNumbersArray = []
 const getData = require('./helper')
 
 app
@@ -51,8 +52,9 @@ app
                     songName    :   filteredTracks.track.name
                 }
             })
-
+        console.log(getRandom(req.session.data))
         io.on('connection', (socket)=>{
+            console.log(`User with the id ${socket.id} has logged in`)
             socket.on('logged in',()=>{
                 console.log('Logged in')
                 users.push({
@@ -61,6 +63,14 @@ app
                     imageUrl: image[0].url
                 })
                 io.emit('users', onlyUnique('socketId',users))
+                socket.emit('user indicator', socket.id)
+            })
+            socket.on('disconnect', ()=>{
+                console.log(`User with id ${socket.id} had disconnected`)
+                const filterOut = onlyUnique('socketId',users)
+                    .filter(user=>user.socketId !== socket.id)
+                users = filterOut
+                io.emit('users', filterOut)
             })
         })
         res.render('game')
@@ -88,7 +98,7 @@ function onlyUnique(prop, array){
     return uniques
 }
 
-const arrayIncludesInObj = (arr, key, valueToCheck) => {
+function arrayIncludesInObj (arr, key, valueToCheck){
     let found = false;
   
     arr.some(value => {
@@ -97,6 +107,32 @@ const arrayIncludesInObj = (arr, key, valueToCheck) => {
         return true; // this will break the loop once found
       }
     });
-  
     return found;
-  }
+}
+
+function getRandom(array){
+    let number
+    if(randomNumbersArray.length===0){ 
+        number = randomNumber(array)  
+        randomNumbersArray.push(number)
+    }
+    else{
+        for(let i=0;i<=array.length;i++){
+            number = randomNumber(array)
+            if(randomNumbersArray.indexOf(number) === -1){
+                randomNumbersArray.push(number)
+            }
+            else i--
+        }
+    }
+    return array[number]
+}
+
+function randomNumber(array){
+    return Math.floor(Math.random()*array.length)
+}
+
+function trimSong(song){
+	const index = song.indexOf('(')
+	return song.slice(0,index).trim()
+}
