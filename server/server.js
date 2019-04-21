@@ -48,11 +48,10 @@ app
                     preview_url :   filteredTracks.track.preview_url,
                     artist      :   filteredTracks.track.artists
                                         .map(artist=>artist.name),
-                    albumImg    :   filteredTracks.track.album.images[0],
+                    albumImg    :   filteredTracks.track.album.images[0].url,
                     songName    :   filteredTracks.track.name
                 }
             })
-        console.log(getRandom(req.session.data))
         io.on('connection', (socket)=>{
             console.log(`User with the id ${socket.id} has logged in`)
             socket.on('logged in',()=>{
@@ -62,6 +61,8 @@ app
                     name,
                     imageUrl: image[0].url
                 })
+                console.log(getRandom(req.session.data))
+                // io.emit('guess', getRandom(req.session.data))
                 io.emit('users', onlyUnique('socketId',users))
                 socket.emit('user indicator', socket.id)
             })
@@ -100,7 +101,6 @@ function onlyUnique(prop, array){
 
 function arrayIncludesInObj (arr, key, valueToCheck){
     let found = false;
-  
     arr.some(value => {
       if (value[key] === valueToCheck) {
         found = true;

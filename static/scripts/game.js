@@ -26,6 +26,11 @@ socket.on('user indicator', (id)=>{
     })
 })
 
+socket.on('guess', (track)=>{
+    console.log('guess the track')
+    console.log(track)
+})
+
 function removeElements(container){
     while(container.firstChild){
         container.removeChild(container.firstChild)

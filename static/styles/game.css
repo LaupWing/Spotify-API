@@ -67,7 +67,15 @@ ul#users li h2{
 .userSelf{
     background: #1DB954;
 }
-
+/* Main styling 
+###########################*/
+main{
+    width: 600px;
+    height: 300px;
+    background: #535353;
+}
+/* Form styling 
+###########################*/
 form{
     display: flex;
     color: white;
