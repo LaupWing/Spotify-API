@@ -13,6 +13,8 @@ socket.on('start game', (users)=>{
     const newElement = '<main class="container"><div class="track_guess"></div><div class="track_reveal-container"><img></img><div class="track-reveal"><h2 class="artist_name"></h2><p class="song_name"></p></div></div></main><form><div class="answer-container"><div class="answer"><h2>Artist</h2><input type="text"></div><p>-</p><div class="answer"><h2>Song</h2><input type="text"></div></div><button>confirm</button></form><ul id="users"></ul>'
     body.insertAdjacentHTML('beforeend', newElement)
     addingItemsToUL(document.getElementById('users'), users)
+    const audioTime = '<div class="audio_time"></div>'
+    document.querySelector('.track_guess').insertAdjacentHTML('beforeend', audioTime)
     socket.emit('get track')
 })
 
@@ -29,10 +31,12 @@ socket.on('guess', (track)=>{
     console.log('guess the track')
     console.log(track)
 })
+
 socket.on('fill waiting room', (users)=>{
     console.log(users)
     addingItemsToUL(document.querySelector('#waiting_room .wrapper'), users)
 })
+
 socket.on('player ready', (obj)=>{
     console.log('Rendering Players Ready')
     addingItemsToUL(document.querySelector('#waiting_room .wrapper'), obj.users)
@@ -50,7 +54,22 @@ socket.on('send track', (track)=>{
     document.querySelector('main .track_reveal-container img').src=track.albumImg
     document.querySelector('.song_name').textContent = track.songName
     document.querySelector('.artist_name').textContent = track.artist.join(', ')
+    document.querySelector('.audio_time')
 })
+
+// Specifik functions to do something
+function playingTime(){
+    const total_time = 5000
+    const timeElapsed = 0
+    const audioTimeBar = document.querySelector('.audio_time')
+    const music_playing = setInterval(()=>{
+        timeElapsed++
+        audioTimeBar.style.width = (100/total_time) * timeElapsed 
+    }, 1)
+    setTimeout(()=>{
+        clearInterval(music_playing)   
+    }, total_time)
+}
 
 // Helper functions
 function addingItemsToUL(ul, array){
@@ -74,4 +93,3 @@ function removeElements(container){
         container.removeChild(container.firstChild)
     }
 }
-
