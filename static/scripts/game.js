@@ -36,6 +36,7 @@ socket.on('guess', function(track){
     console.log(track)
 })
 socket.on('fill wainting room', (users)=>{
+    console.log(users)
     addingItemsToUL(document.querySelector('#waiting_room .wrapper'), users)
 })
 socket.on('player ready', (obj)=>{
@@ -52,6 +53,7 @@ socket.on('player ready', (obj)=>{
 function addingItemsToUL(ul, array){
     removeElements(ul)
     array.forEach(user=>{
+        console.log('building')
         const li = document.createElement('li')
         li.id = user.socketId
         const img = document.createElement('img')
