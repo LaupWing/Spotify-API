@@ -124,6 +124,37 @@ main{
     width: 600px;
     height: 300px;
     background: #535353;
+    overflow: hidden;
+    display: flex;
+}
+main div{
+    width: 50%;
+}
+main .track_reveal-container{
+    position: relative;
+}
+main .track_reveal-container img{
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+main .track-reveal{
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 5;
+    position: relative;
+    color: white;
+}
+main .track-reveal p{
+    color: #1DB954;
 }
 /* Form styling 
 ###########################*/

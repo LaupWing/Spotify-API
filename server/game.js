@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 let users = []
-const playersReadyArray =[]
+let playersReadyArray =[]
 const {getData} = require('./helper')
 const {getRandom} = require('./helper')
 const {onlyUnique} = require('./helper')
@@ -46,23 +46,16 @@ router.get('/', async(req,res)=>{
         if(socket_id[0] === socket.id){
             io.removeAllListeners('connection')
         }
+
+        // All the custom socket events
         socket.on('logged in',()=>{
             console.log('Logged in')
-            // console.log('Loggin Results',getRandom(req.session.data))
             users.push({
                 socketId    : socket.id,
                 name,
                 imageUrl: image[0].url
             })
             io.emit('fill waiting room', onlyUnique('socketId',users))
-            // io.emit('users', onlyUnique('socketId',users))
-            // Dit hieronder doet het niet??? Zodra deze function word aangeropen doet ie het niet
-            // ONtdekking!: het komt door mijn function getRandom?
-            // const test = 'test'
-            // console.log(req.session.data)
-            // console.log(getRandom(req.session.data))
-            getRandom(req.session.data)
-            io.emit('guess', 'huh')
             // socket.emit('user indicator', socket.id)
         })
         socket.on('disconnect', ()=>{
@@ -70,8 +63,10 @@ router.get('/', async(req,res)=>{
             const filterOut = onlyUnique('socketId',users)
                 .filter(user=>user.socketId !== socket.id)
             users = filterOut
+            playersReadyArray = playersReadyArray.filter(id=>id!==socket.id)
             io.emit('users', filterOut)
         })
+
         socket.on('ready', ()=>{
             console.log('Player is ready')
             playersReadyArray.push(socket.id)
@@ -80,7 +75,16 @@ router.get('/', async(req,res)=>{
                 playersReadyArray
             }
             io.emit('player ready', playerObj)
+            if(playersReadyArray.length === users.length){
+                io.emit('start game', onlyUnique('socketId',users))
+            }
+            console.log(playersReadyArray.length, users.length)
         })
+
+        socket.on('get track',()=>{
+            io.emit('send track', getRandom(req.session.data))
+        })
+
     })
     res.render('game', {
         // data: getRandom(req.session.data) 
