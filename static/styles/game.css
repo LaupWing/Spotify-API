@@ -156,6 +156,10 @@ main .track-reveal{
 main .track-reveal p{
     color: #1DB954;
 }
+
+main .track_guess .audio_time{
+    height: 50px;
+}
 /* Form styling 
 ###########################*/
 form{
