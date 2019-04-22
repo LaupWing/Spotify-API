@@ -31,7 +31,58 @@ button:hover{
     background: white;
     color: #1DB954;
 }
-/* Currently Online Users */
+button:focus{
+    outline: none;
+}
+/* States
+############################*/
+.visible{
+    opacity: 1!important;
+}
+/* Waiting room Users 
+############################*/
+#waiting_room{
+    background: #515151;
+    width: 500px;
+    height: 500px;
+    overflow-y: scroll;
+    max-height: 600px;
+    border-bottom: 10px #1DB954 solid;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    color: white;
+    padding: 10px;
+    position: relative;
+}
+#waiting_room button#ready{
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+#waiting_room .wrapper{
+    width: 100%;
+    height: 100%;
+}
+#waiting_room .wrapper li{
+    display: flex;
+    align-items: center;
+    opacity: .5;
+    padding: 10px;
+    border-bottom: solid #B3B3B3 1px;
+}
+#waiting_room .wrapper li img{
+    width: 80px;
+    border-radius: 50%;
+}
+#waiting_room .wrapper li h2{
+    margin-left: 20px;
+}
+
+
+/* Currently Online Users 
+############################*/
 
 ul#users{
     background: #212121;

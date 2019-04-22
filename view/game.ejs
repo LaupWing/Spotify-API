@@ -7,12 +7,17 @@
     <title>Spotify Game</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <link rel="stylesheet" href="./styles/game.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-    <script src="scripts/game.js"></script>
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script src="./scripts/game.js" defer></script>
 </head>
 <body>
-    <!-- <ul id="users_in_room"></ul> -->
-    <main class="container">
+    <ul id="waiting_room">
+        <div class="wrapper">
+            
+        </div>
+        <button id='ready'>im ready</button>
+    </ul>
+    <!-- <main class="container">
         
     </main>
     <form>
@@ -29,6 +34,6 @@
         </div>
         <button>confirm</button>
     </form>
-    <ul id="users"></ul>
+    <ul id="users"></ul> -->
 </body>
 </html>

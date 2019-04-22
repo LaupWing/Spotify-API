@@ -52,18 +52,23 @@ app
                     songName    :   filteredTracks.track.name
                 }
             })
+
         io.on('connection', (socket)=>{
             console.log(`User with the id ${socket.id} has logged in`)
             socket.on('logged in',()=>{
                 console.log('Logged in')
+                // console.log('Loggin Results',getRandom(req.session.data))
                 users.push({
                     socketId    : socket.id,
                     name,
                     imageUrl: image[0].url
                 })
-                console.log(getRandom(req.session.data))
-                // io.emit('guess', getRandom(req.session.data))
-                io.emit('users', onlyUnique('socketId',users))
+                io.emit('fill wainting room', onlyUnique('socketId',users))
+                // io.emit('users', onlyUnique('socketId',users))
+                // Dit hieronder doet het niet??? Zodra deze function word aangeropen doet ie het niet
+                // ONtdekking!: het komt door mijn function getRandom?
+                // const test = 'test'
+                io.emit('guess', getRandom(req.session.data))
                 socket.emit('user indicator', socket.id)
             })
             socket.on('disconnect', ()=>{
@@ -73,11 +78,21 @@ app
                 users = filterOut
                 io.emit('users', filterOut)
             })
+            socket.on('ready', ()=>{
+                const playerReady = {
+                    player: socket.id,
+                    players: users
+                }
+                io.emit('player ready', playerReady)
+            })
         })
-        res.render('game')
+        res.render('game', {
+            // data: getRandom(req.session.data) 
+        })
     })
     .use(express.static("static"))
 
+// Ask wooter voor unique value in prop
 // function onlyUnique(prop){
 //     return function(value, index, self){
 //         console.log(self.indexOf(value[prop]))
@@ -112,9 +127,11 @@ function arrayIncludesInObj (arr, key, valueToCheck){
 
 function getRandom(array){
     let number
+    console.log(number)
     if(randomNumbersArray.length===0){ 
         number = randomNumber(array)  
         randomNumbersArray.push(number)
+        console.log(randomNumbersArray)
     }
     else{
         for(let i=0;i<=array.length;i++){
@@ -125,6 +142,7 @@ function getRandom(array){
             else i--
         }
     }
+    console.log(array[number])
     return array[number]
 }
 
