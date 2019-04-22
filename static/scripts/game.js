@@ -1,9 +1,9 @@
 const socket = io();
 socket.emit('logged in')
 
-document.getElementById('ready').addEventListener('click',()=>{
+document.querySelector('button#ready').addEventListener('click', ()=>{
     socket.emit('ready')
-})
+})  
 
 socket.on('users', function(users){
     console.log('Currently Online users')
@@ -35,18 +35,24 @@ socket.on('guess', function(track){
     console.log('guess the track')
     console.log(track)
 })
-socket.on('fill wainting room', (users)=>{
+socket.on('fill waiting room', (users)=>{
     console.log(users)
     addingItemsToUL(document.querySelector('#waiting_room .wrapper'), users)
 })
 socket.on('player ready', (obj)=>{
     console.log('Rendering Players Ready')
-    addingItemsToUL(document.querySelector('#waiting_room .wrapper'), obj.players)
+    console.log(obj.playersReadyArray)
+    addingItemsToUL(document.querySelector('#waiting_room .wrapper'), obj.users)
     document.querySelectorAll('#waiting_room li').forEach(li=>{
-        console.log(li.id, obj.player)
-        if(li.id === obj.player){
-            li.classList.add('visible')
-        }
+        // console.log(li.id, obj.player)
+        // if(li.id === obj.player){
+        //     li.classList.add('visible')
+        // }
+        obj.playersReadyArray.forEach(id=>{
+            if(li.id === id){
+                li.classList.add('visible')
+            }
+        })
     })
 }) 
 

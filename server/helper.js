@@ -1,4 +1,5 @@
 const fetch = require('node-fetch')
+const randomNumbersArray = []
 
 function getData(settings){
     return fetch(`https://api.spotify.com/v1/${settings.endpoint}`, 
@@ -12,4 +13,57 @@ function getData(settings){
         .then(data=>data[settings.output])
 }
 
-module.exports = getData
+function onlyUnique(prop, array){
+    const uniques = []
+    array.forEach(item=>{
+        if(uniques.length !== 0){
+            if(!arrayIncludesInObj(uniques, prop, item[prop])){
+                uniques.push(item)
+            }
+        }
+        else uniques.push(item)
+    })
+    return uniques
+}
+
+function arrayIncludesInObj (arr, key, valueToCheck){
+    let found = false;
+    arr.some(value => {
+      if (value[key] === valueToCheck) {
+        found = true;
+        return true; // this will break the loop once found
+      }
+    });
+    return found;
+}
+
+function getRandom(array){
+    let number
+    if(randomNumbersArray.length===0){ 
+        number = randomNumber(array)  
+        randomNumbersArray.push(number)
+    }
+    else{
+        for(let i=0;i<randomNumbersArray.length;i++){
+            number = randomNumber(array)
+            if(randomNumbersArray.indexOf(number) === -1){
+                randomNumbersArray.push(number)
+                break
+            }
+            else {
+                i--
+            }
+        }
+    }
+    return array[number]
+}
+
+function randomNumber(array){
+    return Math.floor(Math.random()*array.length)
+}
+
+function trimSong(song){
+	const index = song.indexOf('(')
+	return song.slice(0,index).trim()
+}
+module.exports = {getData, trimSong, getRandom, onlyUnique}
