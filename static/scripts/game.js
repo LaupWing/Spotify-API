@@ -11,9 +11,19 @@ document.querySelector('button#ready').addEventListener('click', ()=>{
     socket.emit('ready')
 })  
 
+// ALl socket events on chronologica order
+// -------------------
+socket.on('start game', users=>createGameEnviroment(users))
+socket.on('fill waiting room', users=>addingItemsToUL(document.querySelector('#waiting_room .wrapper'), users))
+socket.on('player ready', obj=>setPlayersReady(obj)) 
+socket.on('user indicator', id=>setUserIndicator(id))
+socket.on('send track', track=>setTrack(track))
+socket.on('guess', (track)=>{})
 
-// ALl socket events
-socket.on('start game', (users)=>{
+// Functions that are called by the socket events.
+// -------------------
+function createGameEnviroment(users){
+    console.log(`Rendering Users... ${users}`)
     const body = document.body
     removeElements(body)
     const newElement = '<main class="container"><div class="track_guess"></div><div class="track_reveal-container"><img></img><div class="track-reveal"><h2 class="artist_name"></h2><p class="song_name"></p></div></div></main><form id="player_answer"><div class="answer-container"><div class="answer"><h2>Artist</h2><input class="artist_input" type="text"></div><p>-</p><div class="answer"><h2>Song</h2><input class="song_input" type="text"></div></div><button>confirm</button></form><ul id="users"></ul>'
@@ -22,28 +32,18 @@ socket.on('start game', (users)=>{
     const audioTime = '<div class="audio_time"></div>'
     document.querySelector('.track_guess').insertAdjacentHTML('beforeend', audioTime)
     socket.emit('get track')
-})
+}
 
-socket.on('user indicator', (id)=>{
+function setUserIndicator(id){
     const all_li = document.querySelectorAll('#users li')
     all_li.forEach(li=>{
         if(li.id === id){
             li.classList.add('userSelf')
         }
     })
-})
+}
 
-socket.on('guess', (track)=>{
-    console.log('guess the track')
-    console.log(track)
-})
-
-socket.on('fill waiting room', (users)=>{
-    console.log(users)
-    addingItemsToUL(document.querySelector('#waiting_room .wrapper'), users)
-})
-
-socket.on('player ready', (obj)=>{
+function setPlayersReady(obj){
     console.log('Rendering Players Ready')
     addingItemsToUL(document.querySelector('#waiting_room .wrapper'), obj.users)
     document.querySelectorAll('#waiting_room li').forEach(li=>{
@@ -53,21 +53,18 @@ socket.on('player ready', (obj)=>{
             }
         })
     })
-}) 
+}
 
-socket.on('send track', (track)=>{
-    console.log(track)
+function setTrack(track){
+    console.log(`Setting up track enviroment ${track}`)
     document.querySelector('main .track_reveal-container img').src=track.albumImg
     document.querySelector('.song_name').textContent = track.songName
     document.querySelector('.artist_name').textContent = track.artist.join(', ')
     document.querySelector('.audio_time').classList.add('playingAudio')
     document.querySelector('form#player_answer').addEventListener('submit',playersAnswer)
     startTimer()
-})
+}
 
-
-
-// Specifik functions to do something
 function playersAnswer(){
     event.preventDefault()
     clearInterval(window.timer)
@@ -89,6 +86,9 @@ function compareAnswerToSolution(answer){
     console.log(replaceSomeChar(sliceOutParanthesis(song_name)))
 }
 
+
+// Helper functions
+// -------------------
 function replaceSomeChar(string){
     const allChar = [',', '(', ')', '.', "'", '!']
     const result = [...string].map(letter=>{
@@ -124,7 +124,6 @@ String.prototype.replaceAll = function (target, search){
     return target.split(search).join('')
 }
 
-// Helper functions
 function addingItemsToUL(ul, array){
     removeElements(ul)
     array.forEach(user=>{
