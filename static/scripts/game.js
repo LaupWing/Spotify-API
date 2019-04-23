@@ -1,6 +1,12 @@
 const socket = io();
 socket.emit('logged in')
+let time = 0
 
+function startTimer(){
+    window.timer = setInterval(()=>{
+        time++
+    },100)
+}
 document.querySelector('button#ready').addEventListener('click', ()=>{
     socket.emit('ready')
 })  
@@ -10,7 +16,7 @@ document.querySelector('button#ready').addEventListener('click', ()=>{
 socket.on('start game', (users)=>{
     const body = document.body
     removeElements(body)
-    const newElement = '<main class="container"><div class="track_guess"></div><div class="track_reveal-container"><img></img><div class="track-reveal"><h2 class="artist_name"></h2><p class="song_name"></p></div></div></main><form><div class="answer-container"><div class="answer"><h2>Artist</h2><input type="text"></div><p>-</p><div class="answer"><h2>Song</h2><input type="text"></div></div><button>confirm</button></form><ul id="users"></ul>'
+    const newElement = '<main class="container"><div class="track_guess"></div><div class="track_reveal-container"><img></img><div class="track-reveal"><h2 class="artist_name"></h2><p class="song_name"></p></div></div></main><form id="player_answer"><div class="answer-container"><div class="answer"><h2>Artist</h2><input class="artist_input" type="text"></div><p>-</p><div class="answer"><h2>Song</h2><input class="song_input" type="text"></div></div><button>confirm</button></form><ul id="users"></ul>'
     body.insertAdjacentHTML('beforeend', newElement)
     addingItemsToUL(document.getElementById('users'), users)
     const audioTime = '<div class="audio_time"></div>'
@@ -54,21 +60,68 @@ socket.on('send track', (track)=>{
     document.querySelector('main .track_reveal-container img').src=track.albumImg
     document.querySelector('.song_name').textContent = track.songName
     document.querySelector('.artist_name').textContent = track.artist.join(', ')
-    document.querySelector('.audio_time')
+    document.querySelector('.audio_time').classList.add('playingAudio')
+    document.querySelector('form#player_answer').addEventListener('submit',playersAnswer)
+    startTimer()
 })
 
+
+
 // Specifik functions to do something
-function playingTime(){
-    const total_time = 5000
-    const timeElapsed = 0
-    const audioTimeBar = document.querySelector('.audio_time')
-    const music_playing = setInterval(()=>{
-        timeElapsed++
-        audioTimeBar.style.width = (100/total_time) * timeElapsed 
-    }, 1)
-    setTimeout(()=>{
-        clearInterval(music_playing)   
-    }, total_time)
+function playersAnswer(){
+    event.preventDefault()
+    clearInterval(window.timer)
+    const artist = document.querySelector('input[type="text"].artist_input').value
+    const song = document.querySelector('input[type="text"].song_input').value
+    const answer = {
+        time,
+        artist,
+        song
+    }
+    compareAnswerToSolution(answer)
+}
+
+function compareAnswerToSolution(answer){
+    const artist_name = document.querySelector('h2.artist_name').innerText
+    const song_name = document.querySelector('p.song_name').innerText
+    console.log(artist_name,song_name)
+    console.log(replaceSomeChar(artist_name))
+    console.log(replaceSomeChar(sliceOutParanthesis(song_name)))
+}
+
+function replaceSomeChar(string){
+    const allChar = [',', '(', ')', '.', "'", '!']
+    const result = [...string].map(letter=>{
+            if(allChar.includes(letter)){
+                return letter.replace(letter, '')
+            }else{
+                return letter
+            }
+        }) 
+        // array.forEach(char=>{
+        //     result.replaceAll(result, char)
+        //     console.log(result)
+        // })
+        console.log(result)
+    
+    return result.join('').toLowerCase().trim()
+    // return string
+    //     .replaceAll(string,',')
+    //     .replaceAll(string,'(')
+    //     .replaceAll(string,')')
+    //     .replaceAll(string,'.')
+    //     .replaceAll(string,'!')
+    //     .replaceAll(string,"'")
+    //     .toLowerCase()
+    //     .trim()
+}
+function sliceOutParanthesis(string){
+    const index = string.indexOf('(')
+    if(index === -1) return string
+    return string.slice(0, index)
+}
+String.prototype.replaceAll = function (target, search){
+    return target.split(search).join('')
 }
 
 // Helper functions
