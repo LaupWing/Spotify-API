@@ -128,9 +128,24 @@ main{
     background: #535353;
     overflow: hidden;
     display: flex;
+    position: relative;
 }
 main div{
     width: 50%;
+}
+main audio{
+    position: absolute;
+    z-index: 5000;
+    left: 0;
+    bottom: 0;
+}
+main svg{
+    width: 50%;
+    background: #B3B3B3;
+    position: absolute;
+    height: 100%;
+    right: 0;
+    z-index: 100;
 }
 main .track_reveal-container{
     position: relative;
@@ -160,13 +175,43 @@ main .track-reveal p{
 }
 main .track_guess{
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+main .track_guess h2:first-of-type{
+    width: 100%;
+    text-align: center;
+    color: #1DB954;
+    position: absolute;
+    top: 5px;
+    font-size: 20px;
+    font-weight: 100;
+}
+main .track_guess svg{
+    left: 0;
+    background: transparent;
+    margin: auto;
+}
+main .track_guess .readyMsg{
+    width: 13px;
+    z-index: 1000;
+}
+
+main .track_guess svg #Playbutton{
+    fill: transparent;
 }
 main .track_guess .audio_time{
     height: 10px;
     background: #1DB954;
     position: absolute;
     bottom: 0;
+    left: 0;
+    width: 0;
 }
+/* Svg States */
+
 /* Form styling 
 ###########################*/
 form{
@@ -198,7 +243,24 @@ form .answer-container p{
 }
 form .answer-container div input[type='text']:focus{
     outline: none;
+
 }
+/* SVG Styling
+#########################*/
+svg .black{
+    fill:#1d1d1b;
+}
+svg .white{
+    fill:#fff;
+}
+svg .black2{
+    fill:#121211;
+}
+svg .green{
+    fill:#3ead55;
+}
+
+
 /* Custom Scrollbar 
 #########################*/
 /* width */

@@ -1,12 +1,53 @@
-.playingAudio{
+.audio_time.start{
     animation: progressBar5s 5s forwards; 
 }
-
+.readyMsg.start::after{
+    content: '5';
+    color: white;
+    font-size: 22px;
+    animation: startCounter 7s forwards;
+    animation-delay: 3s;
+}
+#innerOutline.start{
+    animation: rotate 2s forwards infinite linear;
+    animation-delay: 3s;
+    transform-origin: center;
+}
 @keyframes progressBar5s{
     0%{
         width: 0;
     }
     100%{
         width: 100%;
+    }
+}
+
+@keyframes startCounter{
+    0%{
+        content: '5'
+    }
+    20%{
+        content: '4'
+    }
+    40%{
+        content: '3'
+    }
+    60%{
+        content: '2'
+    }
+    80%{
+        content: '1'
+    }
+    100%{
+        content: '0'
+    }
+}
+
+@keyframes rotate{
+    0%{
+        transform: rotate(0);
+    }
+    100%{
+        transform: rotate(360deg);
     }
 }
