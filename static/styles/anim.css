@@ -9,9 +9,12 @@
     animation-delay: 3s;
 }
 #innerOutline.start{
-    animation: rotate 2s forwards infinite linear;
+    animation: rotate 3.5s forwards infinite linear;
     animation-delay: 3s;
     transform-origin: center;
+}
+svg#play_btn.start{
+    animation: rotate 5s forwards infinite linear;
 }
 @keyframes progressBar5s{
     0%{

@@ -36,11 +36,16 @@ button:hover{
 button:focus{
     outline: none;
 }
+
 /* States
 ############################*/
 .visible{
     opacity: 1!important;
 }
+.invisible{
+    opacity: 0!important;
+}
+
 /* Waiting room Users 
 ############################*/
 #waiting_room{
@@ -133,9 +138,11 @@ main{
 main div{
     width: 50%;
 }
-main audio{
+main #media{
     position: absolute;
-    z-index: 5000;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
     left: 0;
     bottom: 0;
 }
@@ -198,8 +205,10 @@ main .track_guess .readyMsg{
     width: 13px;
     z-index: 1000;
 }
-
 main .track_guess svg #Playbutton{
+    fill: #1DB954;
+}
+main .track_guess svg #Playbutton.transparent{
     fill: transparent;
 }
 main .track_guess .audio_time{
@@ -210,7 +219,7 @@ main .track_guess .audio_time{
     left: 0;
     width: 0;
 }
-/* Svg States */
+/* States */
 
 /* Form styling 
 ###########################*/
