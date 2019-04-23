@@ -55,6 +55,7 @@ function getRandom(array){
             }
         }
     }
+    console.log(randomNumbersArray)
     return array[number]
 }
 

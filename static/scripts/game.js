@@ -57,7 +57,8 @@ function setPlayersReady(obj){
 }
 
 function setTrack(track){
-    console.log(`Setting up track enviroment ${track}`)
+    console.log('Setting up track enviroment')
+    console.log(track)
     document.querySelector('.song_name').textContent = track.songName
     document.querySelector('.artist_name').textContent = track.artist.join(', ')
     createAudioElement(track.preview_url)
@@ -100,7 +101,6 @@ function startingAnimation(){
 
 function startTrack(){
     // Start Track
-    console.log(event)
     console.log('Starting Track')
     document.querySelector('main .track_guess h2').innerText = 'Guess the track'
     document.querySelector('main .track_guess .readyMsg').classList.add('invisible')
@@ -149,19 +149,16 @@ function nextSong(){
     document.querySelector('main .track_guess h2').innerText = 'Track starting in'
     document.querySelector('main svg #innerOutline').classList.remove('start','pause_animation')
     document.querySelector('main .readyMsg').classList.remove('start', 'start15')
-    document.querySelector('main .track_guess svg#play_btn').classList.remove('start')
+    document.querySelector('main .track_guess svg#play_btn').classList.remove('start', 'pause_animation')
     document.querySelector('main .track_guess .audio_time').classList.remove('start')
     removeElements(document.querySelector('#media'))
-    document.querySelector('main svg#Face').addEventListener('transitionend',()=>{
-        socket.emit('get track')
-    })
-    setTimeout(()=>{
-        document.querySelector('main svg#Face').removeEventListener('transitionend',()=>{
-            socket.emit('get track')
-        })
-    },2000)
+    document.querySelector('main svg#Face').addEventListener('transitionend',getTrackEmit)
 }
 
+function getTrackEmit(){
+    socket.emit('get track')
+    document.querySelector('main svg#Face').removeEventListener('transitionend',getTrackEmit)
+}
 
 function playersAnswer(){
     event.preventDefault()
