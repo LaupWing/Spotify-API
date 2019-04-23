@@ -45,6 +45,9 @@ button:focus{
 .invisible{
     opacity: 0!important;
 }
+.reveal{
+    transform: translate(-100%,0);
+}
 
 /* Waiting room Users 
 ############################*/
@@ -146,13 +149,38 @@ main #media{
     left: 0;
     bottom: 0;
 }
+main #time_is_up{
+    z-index: 10000;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: rgba(0,0,0,0.75);
+    color: white;
+    opacity: 0;
+    transition: 3s;
+}
+
+main #time_is_up p{
+    transform: translate(0,200px);
+}
+main #time_is_up h2{
+    font-family: 'Press Start 2P', cursive;
+}
 main svg{
     width: 50%;
     background: #B3B3B3;
     position: absolute;
     height: 100%;
     right: 0;
-    z-index: 100;
+    z-index: 2000;
+    transition: 2s;
+}
+main svg#Face{
+    z-index: 3000;
 }
 main .track_reveal-container{
     position: relative;
@@ -180,6 +208,11 @@ main .track-reveal{
 main .track-reveal p{
     color: #1DB954;
 }
+main .track-reveal h2,
+main .track-reveal p{
+    background: rgba(0,0,0,0.6);
+    padding: 3px 10px;
+}
 main .track_guess{
     position: relative;
     display: flex;
@@ -203,12 +236,12 @@ main .track_guess svg{
 }
 main .track_guess .readyMsg{
     width: 13px;
-    z-index: 1000;
+    z-index: 2001;
 }
-main .track_guess svg #Playbutton{
+main .track_guess svg#play_btn_arrow #Playbutton{
     fill: #1DB954;
 }
-main .track_guess svg #Playbutton.transparent{
+main .track_guess svg#play_btn_arrow #Playbutton.transparent{
     fill: transparent;
 }
 main .track_guess .audio_time{
