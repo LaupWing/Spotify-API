@@ -26,7 +26,7 @@ function createGameEnviroment(users){
     console.log(`Rendering Users... ${users}`)
     const body = document.body
     removeElements(body)
-    const newElement = '<main class="container"><audio controls><source src="" type="audio/mpeg">Your browser does not support the audio element.</audio><div class="track_guess"><h2>Track starts in</h2></div><div class="track_reveal-container"><img></img><div class="track-reveal"><h2 class="artist_name"></h2><p class="song_name"></p></div></div></main><form id="player_answer"><div class="answer-container"><div class="answer"><h2>Artist</h2><input class="artist_input" type="text"></div><p>-</p><div class="answer"><h2>Song</h2><input class="song_input" type="text"></div></div><button>confirm</button></form><ul id="users"></ul>'
+    const newElement = '<main class="container"><audio controls><source type="audio/mpeg">Your browser does not support the audio element.</audio><div class="track_guess"><h2>Track starts in</h2></div><div class="track_reveal-container"><img></img><div class="track-reveal"><h2 class="artist_name"></h2><p class="song_name"></p></div></div></main><form id="player_answer"><div class="answer-container"><div class="answer"><h2>Artist</h2><input class="artist_input" type="text"></div><p>-</p><div class="answer"><h2>Song</h2><input class="song_input" type="text"></div></div><button>confirm</button></form><ul id="users"></ul>'
     body.insertAdjacentHTML('beforeend', newElement)
     addingItemsToUL(document.getElementById('users'), users)
     const audioTime = '<div class="audio_time"></div>'
