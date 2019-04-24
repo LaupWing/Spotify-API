@@ -26,7 +26,7 @@ function createGameEnviroment(users){
     console.log(`Rendering Users... ${users}`)
     const body = document.body
     removeElements(body)
-    const newElement = '<main class="container"><div id="time_is_up"><h2>Time is up<h2><p>The Answer is</p></div><div id="media"></div><div class="track_guess"><h2>Track starts in</h2><div class="readyMsg"></div></div><div class="track_reveal-container"><img></img><div class="track-reveal"><h2 class="artist_name"></h2><p class="song_name"></p></div></div></main><form id="player_answer"><div class="answer-container"><div class="answer"><h2>Artist</h2><input class="artist_input" type="text"></div><p>-</p><div class="answer"><h2>Song</h2><input class="song_input" type="text"></div></div><button>confirm</button></form><ul id="users"></ul>'
+    const newElement = '<main class="container"><div id="time_is_up"><h2>Time is up<h2><p>The Answer is</p></div><div id="media"></div><div class="track_guess"><h2>Track starts in</h2><div class="readyMsg"></div></div><div class="track_reveal-container"><img></img><div class="track-reveal"><h2 class="artist_name"></h2><p class="song_name"></p></div></div></main><form id="player_answer"><div class="answer-container"><div class="answer"><h2>Artist</h2><input class="artist_input" type="text"><p class="user_artist_guess"></p></div><p>-</p><div class="answer"><h2>Song</h2><input class="song_input" type="text"><p class="user_song_guess"></p></div></div><button>confirm</button></form><ul id="users"></ul>'
     body.insertAdjacentHTML('beforeend', newElement)
     addingItemsToUL(document.getElementById('users'), users)
     const audioTime = '<div class="audio_time"></div>'
@@ -155,6 +155,11 @@ function nextSong(){
     document.querySelector('main svg#Face').addEventListener('transitionend',getTrackEmit)
 }
 
+function resetTimer(){
+    clearInterval(window.timer)
+    time= 0;
+}
+
 function getTrackEmit(){
     socket.emit('get track')
     document.querySelector('main svg#Face').removeEventListener('transitionend',getTrackEmit)
@@ -162,7 +167,7 @@ function getTrackEmit(){
 
 function playersAnswer(){
     event.preventDefault()
-    clearInterval(window.timer)
+    resetTimer
     const artist = document.querySelector('input[type="text"].artist_input').value
     const song = document.querySelector('input[type="text"].song_input').value
     const answer = {
@@ -170,7 +175,32 @@ function playersAnswer(){
         artist,
         song
     }
+    renderAnswer(answer)
     compareAnswerToSolution(answer)
+    removeFormItems()
+}
+
+function removeFormItems(){
+    const inputs = document.querySelectorAll('form .answer-container div input[type="text"]')
+    const submitBtn = document.querySelector('form button')
+
+    inputs.forEach(input=>{
+        console.log(input)
+        input.classList.add('start')
+        input.setAttribute('disabled', true)
+    })
+    submitBtn.classList.add('start')
+    submitBtn.setAttribute('disabled', true)
+}
+
+function renderAnswer(answer){
+    const user_song_guess = document.querySelector('form .answer-container .user_song_guess')
+    const user_artist_guess = document.querySelector('form .answer-container .user_artist_guess')
+    user_song_guess.innerText = answer.song
+    user_artist_guess.innerText = answer.artist
+
+    user_song_guess.classList.add('start')
+    user_artist_guess.classList.add('start')
 }
 
 function compareAnswerToSolution(answer){
@@ -234,4 +264,8 @@ function removeElements(container){
     while(container.firstChild){
         container.removeChild(container.firstChild)
     }
+}
+
+function removeSelf(item){
+    item.parentElement.removeChild(this)
 }

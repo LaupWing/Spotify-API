@@ -285,7 +285,26 @@ form .answer-container p{
 }
 form .answer-container div input[type='text']:focus{
     outline: none;
-
+}
+form .answer-container .answer{
+    position: relative;
+}
+form .answer-container .user_artist_guess,
+form .answer-container .user_song_guess{
+    position: absolute;
+    color: #1DB954;
+    font-size: 25px;
+    top: 18px;
+    width: 100%;
+    text-align: center;
+}
+form .answer-container .user_artist_guess{
+    transform: translate(-50px,0);
+    opacity: 0;
+}
+form .answer-container .user_song_guess{
+    transform: translate(50px,0);
+    opacity: 0;
 }
 /* SVG Styling
 #########################*/

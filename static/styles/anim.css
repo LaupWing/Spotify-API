@@ -39,6 +39,75 @@ main #time_is_up p.start{
 svg#play_btn.start{
     animation: rotate 5s forwards infinite linear;
 }
+
+
+
+/* Form Keyframes 
+-------------------*/
+form .answer-container div input[type="text"].start{
+    animation: inputDissapear 1s forwards;
+}
+form .answer-container div input[type="text"].re-start{
+    animation: inputDissapear 1s reverse;
+}
+@keyframes inputDissapear{
+    0%{
+        transform: translate(0,0);
+        opacity: 1;
+    }
+    100%{
+        transform: translate(0,-50px);
+        opacity: 0;
+        user-select: none;
+    }
+}
+
+form button.start{
+    animation: formBtnDissapear 1s forwards;
+}
+form button.re-start{
+    animation: formBtnDissapear 1s reverse;
+}
+@keyframes formBtnDissapear{
+    0%{
+        transform: translate(0,0);
+        opacity: 1;
+    }
+    100%{
+        transform: translate(0,50px);
+        opacity: 0;
+        user-select: none;
+    }
+}
+
+form .answer-container .user_artist_guess.start{
+    animation: appearUserArtistGuess 1s forwards;
+}
+@keyframes appearUserArtistGuess{
+    0%{
+        transform: translate(-50px,0);
+        opacity: 0;
+    }
+    100%{
+        transform: translate(0,0);
+        opacity: 1;
+    }
+}
+
+form .answer-container .user_song_guess.start{
+    animation: appearUserSongGuess 1s forwards;
+}
+@keyframes appearUserSongGuess{
+    0%{
+        transform: translate( 50px,0);
+        opacity: 0;
+    }
+    100%{
+        transform: translate(0,0);
+        opacity: 1;
+    }
+}
+
 @keyframes progressBar5s{
     0%{
         width: 0;
