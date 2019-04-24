@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 let users = []
 let playersReadyArray =[]
+let askTrack = []
 const {getData} = require('./helper')
 const {getRandom} = require('./helper')
 const {onlyUnique} = require('./helper')
@@ -40,51 +41,65 @@ router.get('/', async(req,res)=>{
                 songName    :   filteredTracks.track.name
             }
         })
+    function newPlayerLoggedIn(socket_id){
+        console.log('Logged in')
+        users.push({
+            socketId    : socket_id,
+            name,
+            imageUrl: image[0].url
+        })
+        io.emit('fill waiting room', onlyUnique('socketId',users))
+        // socket.emit('user indicator', socket.id)
+    }
+
+    function playerHasDisconnected(socket_id){
+        console.log(`User with id ${socket_id} had disconnected`)
+        const filterOut = onlyUnique('socketId',users)
+            .filter(user=>user.socketId !== socket_id)
+        users = filterOut
+        playersReadyArray = playersReadyArray.filter(id=>id!==socket_id)
+        io.emit('users', filterOut)
+    }
+
+    function playerIsReady(socket_id){
+        console.log('Player is ready')
+        playersReadyArray.push(socket_id)
+        const playerObj = {
+            users,
+            playersReadyArray
+        }
+        io.emit('player ready', playerObj)
+        if(playersReadyArray.length === users.length){
+            io.emit('start game', onlyUnique('socketId',users))
+        }
+        console.log(playersReadyArray.length, users.length)
+    }
+
+    function getTrack(socket_id){
+        askTrack = []
+        console.log(socket_id)
+        askTrack.push(socket_id)
+        console.log(`Sending track by ${socket_id}`)
+        console.log(askTrack)
+        askTrack.forEach(asker=>{
+            if(users[0].socketId === asker){
+                console.log(asker, ' is sending a track')
+                io.emit('send track', getRandom(req.session.data))
+            }
+        })
+    }
+
     io.on('connection', (socket)=>{
         console.log(`User with the id ${socket.id} has logged in`)
         socket_id.push(socket.id)
         if(socket_id[0] === socket.id){
             io.removeAllListeners('connection')
         }
-
         // All the custom socket events
-        socket.on('logged in',()=>{
-            console.log('Logged in')
-            users.push({
-                socketId    : socket.id,
-                name,
-                imageUrl: image[0].url
-            })
-            io.emit('fill waiting room', onlyUnique('socketId',users))
-            // socket.emit('user indicator', socket.id)
-        })
-        socket.on('disconnect', ()=>{
-            console.log(`User with id ${socket.id} had disconnected`)
-            const filterOut = onlyUnique('socketId',users)
-                .filter(user=>user.socketId !== socket.id)
-            users = filterOut
-            playersReadyArray = playersReadyArray.filter(id=>id!==socket.id)
-            io.emit('users', filterOut)
-        })
-
-        socket.on('ready', ()=>{
-            console.log('Player is ready')
-            playersReadyArray.push(socket.id)
-            const playerObj = {
-                users,
-                playersReadyArray
-            }
-            io.emit('player ready', playerObj)
-            if(playersReadyArray.length === users.length){
-                io.emit('start game', onlyUnique('socketId',users))
-            }
-            console.log(playersReadyArray.length, users.length)
-        })
-
-        socket.on('get track',()=>{
-            io.emit('send track', getRandom(req.session.data))
-        })
-
+        socket.on('logged in',()=>newPlayerLoggedIn(socket.id))
+        socket.on('disconnect', ()=>playerHasDisconnected(socket.id))
+        socket.on('ready', ()=>playerIsReady(socket.id))
+        socket.on('get track',()=>getTrack(socket.id))
     })
     res.render('game', {
         // data: getRandom(req.session.data) 

@@ -64,15 +64,18 @@ function setTrack(track){
     createAudioElement(track.preview_url)
     document.querySelector('form#player_answer').addEventListener('submit',playersAnswer)
     document.querySelector('main .track_reveal-container img').src=track.albumImg
+    console.log('Rendered Track')
+    console.log(document.querySelector('#media audio source').src)
+    console.log(document.querySelector('.song_name').textContent,document.querySelector('.artist_name').textContent)
     startTimer()
     // staring Countdown
     startingAnimation()
 }
 
 function createAudioElement(src){
-    var audio = document.createElement('audio');
-    var source = document.createElement('source');
-    var media = document.getElementById('media');
+    const audio = document.createElement('audio');
+    const source = document.createElement('source');
+    const media = document.getElementById('media');
     media.appendChild(audio);
     audio.appendChild(source);
     source.setAttribute('src', src);
@@ -224,25 +227,11 @@ function replaceSomeChar(string){
             }
         }) 
     return result.join('').toLowerCase().trim()
-    // return string
-    //     .replaceAll(string,',')
-    //     .replaceAll(string,'(')
-    //     .replaceAll(string,')')
-    //     .replaceAll(string,'.')
-    //     .replaceAll(string,'!')
-    //     .replaceAll(string,"'")
-    //     .toLowerCase()
-    //     .trim()
 }
 function sliceOutParanthesis(string){
     const index = string.indexOf('(')
     if(index === -1) return string
     return string.slice(0, index)
-}
-// ASK WOOOOOOOTEEER
-// Help with classes
-String.prototype.replaceAll = function (target, search){
-    return target.split(search).join('')
 }
 
 function addingItemsToUL(ul, array){

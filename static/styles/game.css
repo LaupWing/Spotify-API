@@ -161,7 +161,7 @@ main #time_is_up{
     background: rgba(0,0,0,0.75);
     color: white;
     opacity: 0;
-    transition: 3s;
+    transition: 1.5s;
 }
 
 main #time_is_up p{

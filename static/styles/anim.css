@@ -6,11 +6,11 @@
 }
 main #time_is_up h2.start{
     animation: fadeUp 1s forwards;
-    animation-delay: 4s;
+    animation-delay: 2s;
 }
 main #time_is_up p.start{
-    animation: fadeUpAndOut 3s forwards;
-    animation-delay: 5s;
+    animation: fadeUpAndOut 2s forwards;
+    animation-delay: 3s;
 }
 .audio_time.start{
     animation: progressBar5s 5s forwards; 
