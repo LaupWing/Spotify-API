@@ -270,6 +270,10 @@ form .answer-container div h2{
     text-align: center;
     font-weight: 100;
 }
+form .answer-container div input[type='text'],
+form button{
+    transition: 1s;
+}
 form .answer-container div input[type='text']{
     background: white;
     border: none;
@@ -297,6 +301,7 @@ form .answer-container .user_song_guess{
     top: 18px;
     width: 100%;
     text-align: center;
+    transition: .5s;
 }
 form .answer-container .user_artist_guess{
     transform: translate(-50px,0);

@@ -88,6 +88,12 @@ router.get('/', async(req,res)=>{
             }
         })
     }
+    function getName(socket_id){
+        return users
+            .filter(user=>user.socketId === socket_id)
+            .map(user=>user.name)
+
+    }
 
     io.on('connection', (socket)=>{
         console.log(`User with the id ${socket.id} has logged in`)
@@ -100,6 +106,10 @@ router.get('/', async(req,res)=>{
         socket.on('disconnect', ()=>playerHasDisconnected(socket.id))
         socket.on('ready', ()=>playerIsReady(socket.id))
         socket.on('get track',()=>getTrack(socket.id))
+        socket.on('idunno', ()=>{
+            console.log(getName(socket.id)[0])
+            socket.emit('userDoesntKnow',getName(socket.id)[0])
+        })
     })
     res.render('game', {
         // data: getRandom(req.session.data) 

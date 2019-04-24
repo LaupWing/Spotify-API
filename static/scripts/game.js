@@ -123,7 +123,12 @@ function endOfTrack(){
     document.querySelector('main .track_guess .readyMsg').classList.remove('start', 'invisible')
     document.querySelector('main .track_guess .readyMsg').removeEventListener('animationend', startTrack)
     document.querySelector('main .track_guess .readyMsg').classList.add('start15')
-    document.querySelector('main .track_guess .readyMsg').addEventListener('animationend', timeEnded)
+    document.querySelector('main .track_guess .readyMsg').addEventListener('animationend', endOfTrackBridge)
+}
+
+function endOfTrackBridge(){
+    timeEnded()
+    playersAnswer()
 }
 
 function timeEnded(){
@@ -147,7 +152,7 @@ function revealTrack(){
 }
 
 function nextSong(){
-    document.querySelector('main .track_guess .readyMsg').removeEventListener('animationend', timeEnded)
+    document.querySelector('main .track_guess .readyMsg').removeEventListener('animationend', endOfTrackBridge)
     document.querySelector('main svg#Face').classList.remove('reveal')
     document.querySelector('main .track_guess h2').innerText = 'Track starting in'
     document.querySelector('main svg #innerOutline').classList.remove('start','pause_animation')
@@ -155,7 +160,7 @@ function nextSong(){
     document.querySelector('main .track_guess svg#play_btn').classList.remove('start', 'pause_animation')
     document.querySelector('main .track_guess .audio_time').classList.remove('start')
     removeElements(document.querySelector('#media'))
-    document.querySelector('main svg#Face').addEventListener('transitionend',getTrackEmit)
+    document.querySelector('main svg#Face').addEventListener('transitionend',nextSongBridge)
 }
 
 function resetTimer(){
@@ -163,47 +168,107 @@ function resetTimer(){
     time= 0;
 }
 
+function nextSongBridge(){
+    getTrackEmit()
+    resetAnswer()
+}
+
 function getTrackEmit(){
     socket.emit('get track')
-    document.querySelector('main svg#Face').removeEventListener('transitionend',getTrackEmit)
+    document.querySelector('main svg#Face').removeEventListener('transitionend',nextSongBridge)
 }
 
 function playersAnswer(){
     event.preventDefault()
-    resetTimer
-    const artist = document.querySelector('input[type="text"].artist_input').value
-    const song = document.querySelector('input[type="text"].song_input').value
-    const answer = {
-        time,
-        artist,
-        song
+    let artist = document.querySelector('input[type="text"].artist_input').value
+    let song = document.querySelector('input[type="text"].song_input').value
+    console.log(artist, song)
+    if(artist === '' && song === ''){
+        socket.emit('idunno')
+        socket.on('userDoesntKnow', (name)=>{
+            artist = name
+            song = 'I dont know this track'
+            const answer = {
+                time,
+                artist,
+                song
+            }
+            answerMiddleware(answer)
+        })
     }
-    renderAnswer(answer)
+    else{
+        const answer = {
+            time,
+            artist,
+            song
+        }
+        answerMiddleware(answer)
+    }
+}
+
+function answerMiddleware(answer){
+    resetTimer()
+    // After the form has removed it items this functions will start
+    // I can do it with a transitionend but that was way more work
+    // Becaause i have to remove the transition also with transitionend
+    setTimeout(()=>{
+        renderAnswer(answer)
+    },1000)
     compareAnswerToSolution(answer)
     removeFormItems()
 }
 
 function removeFormItems(){
-    const inputs = document.querySelectorAll('form .answer-container div input[type="text"]')
-    const submitBtn = document.querySelector('form button')
-
-    inputs.forEach(input=>{
-        console.log(input)
-        input.classList.add('start')
-        input.setAttribute('disabled', true)
+    setFormItems({
+        action: 'add',
+        disable: true
     })
-    submitBtn.classList.add('start')
-    submitBtn.setAttribute('disabled', true)
 }
 
 function renderAnswer(answer){
     const user_song_guess = document.querySelector('form .answer-container .user_song_guess')
     const user_artist_guess = document.querySelector('form .answer-container .user_artist_guess')
+
     user_song_guess.innerText = answer.song
     user_artist_guess.innerText = answer.artist
 
     user_song_guess.classList.add('start')
     user_artist_guess.classList.add('start')
+}
+
+function resetAnswer(){
+    const user_song_guess = document.querySelector('form .answer-container .user_song_guess')
+    const user_artist_guess = document.querySelector('form .answer-container .user_artist_guess')
+
+    user_song_guess.innerText = ''
+    user_artist_guess.innerText = ''
+
+    user_song_guess.classList.remove('start')
+    user_artist_guess.classList.remove('start')
+    user_artist_guess.addEventListener('transitionend', resetForm)
+}
+
+function resetForm(){
+    const user_artist_guess = document.querySelector('form .answer-container .user_artist_guess')
+    user_artist_guess.removeEventListener('transitionend', resetForm)
+    setFormItems({
+        action: 'remove',
+        disable: false
+    })
+}
+
+function setFormItems(setting){
+    const inputs = document.querySelectorAll('form .answer-container div input[type="text"]')
+    const submitBtn = document.querySelector('form button')
+
+    inputs.forEach(input=>{
+        console.log(input)
+        if(!setting.disable) input.value = ''
+        input.classList[setting.action]('start')
+        input.setAttribute('disabled', setting.disable)
+    })
+    submitBtn.classList[setting.action]('start')
+    submitBtn.setAttribute('disabled', setting.disable)
 }
 
 function compareAnswerToSolution(answer){
