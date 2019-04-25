@@ -17,7 +17,7 @@ This is my first drawning of the application. The drawning is a the actual game 
 
 ## Spotify API
 ## Data flow
-![Data Flow](README_images/Dataflow.png)
+![Data Flow](README_images/dataflow2.png)
 
 ### OAuth
 In order to get data from the api the user has to grant acces to their spotify account's data. This will be done thourgh OAuth. 
