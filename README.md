@@ -5,6 +5,7 @@ A game which the players have guess the song. The first person who has guessed t
 
 ## Table of Contents
 * [Installing](#installing-)
+* [First Drawning](#first-drawning-)
 * [API](#api-)
     * [OAuth](#oauth)
     * [Data Flow](#data-flow)
@@ -20,6 +21,10 @@ npm run start
 
 https://localhost:3000
 ```
+## First Drawning
+This is my first drawning of the application. The drawning is a the actual game screen. 
+
+![Sketches](README_images/scherm1.png)
 
 ## API
 For this application i have used the Spotify API.
@@ -40,7 +45,16 @@ In order to get data from the api the user has to grant acces to their spotify a
 ![Data Flow](README_images/dataflow2.png)
 
 
-**Getting Points:** Who guessed the song first gets 1000 points second 900 third and so on. Basic right?
+## Game Instructions
+Here you can find the instructions of the application from start to end
+### Begin Screen
+On the landing page the websites ask the user to login with his/her Spotify account. I made the landing page very inviting for the user to login so it wouldn't be a basic login screen.
+![Data Flow](README_images/LandingPage.gif)
+
+### Waiting room
+In this page the user has to wait(or not) for other players to enter the game. The player can play by his/herself by clicking on the `IM READY` button before anyone enters the waiting room. If a player is barely visible that means that they didn't clicked the `IM READY` button yet.
+![Data Flow](README_images/WaitingRoom.gif)
+##
 
 | Points | Order guessed |
 |--------|:-------------:|
@@ -48,10 +62,6 @@ In order to get data from the api the user has to grant acces to their spotify a
 | 900    |     Second    |
 | 800    |     Third     |
 
-## First Drawning
-This is my first drawning of the application. The drawning is a the actual game screen. 
-
-![Sketches](README_images/scherm1.png)
 
 
 
