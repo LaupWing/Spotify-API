@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 let users = []
 let playersReadyArray =[]
-let askTrack = []
+let emittingArray = []
 let answers = []
 const {getData} = require('./helper')
 const {getRandom} = require('./helper')
@@ -77,13 +77,14 @@ router.get('/', async(req,res)=>{
     }
 
     function getTrack(socket_id){
-        askTrack = []
-        askTrack.push(socket_id)
-        console.log(`Sending track by ${socket_id}`)
-        console.log(askTrack)
-        onlyFirstUserEmits(()=>{io.emit('send track', getRandom(req.session.data))})
+        emittingArray = []
+        // resetArray(askTrack, socket_id)
+        emittingArray.push(socket_id)
+        console.log(`Requesting track by ${socket_id}`)
+        onlyFirstUserEmits(()=>io.emit('send track', getRandom(req.session.data)))
     }
     function getName(socket_id){
+        console.log('Getting the name')
         return users
         .filter(user=>user.socketId === socket_id)
         .map(user=>user.name)
@@ -91,26 +92,36 @@ router.get('/', async(req,res)=>{
     }
     
     function onlyFirstUserEmits(action){
-        askTrack.forEach(asker=>{
+        emittingArray.forEach(asker=>{
             if(users[0].socketId === asker){
+                console.log('---------------------->>')
                 console.log(asker, ' is sending a track')
                 action()
             }
         })
     }
 
-    function setScore(answer, id){         
+    function resetArray(array){
+        array.length = 0
+    }
+
+    function gettinResults(answer, id){         
         answers.push({
             name: users
                 .filter(user=>user.socketId===id)
                 .map(user=>user.name)[0],
             answer
         })
-        console.log(answer)
+        console.log('Anwswers Array',answers)
         if(answers.length === users.length){
             console.log('emittttting results')
             io.emit('sending results', answers)
         }
+    }
+
+    function idontfkingknow(socket_id){
+        console.log('i dont fking know')
+        return getName(socket_id)[0]
     }
 
     io.on('connection', (socket)=>{
@@ -124,8 +135,9 @@ router.get('/', async(req,res)=>{
         socket.on('disconnect', ()=>playerHasDisconnected(socket.id))
         socket.on('ready', ()=>playerIsReady(socket.id))
         socket.on('get track',()=>getTrack(socket.id))
-        socket.on('idunno', ()=>socket.emit('userDoesntKnow',getName(socket.id)[0]))
-        socket.on('answer',(answer)=>{setScore(answer, socket.id)})
+        socket.on('idunno', ()=>socket.emit('userDoesntKnow',idontfkingknow(socket.id)))
+        socket.on('answer',(answer)=>{gettinResults(answer, socket.id)})
+        socket.on('reset results',()=>onlyFirstUserEmits(()=>resetArray(answers)))
     })
     res.render('game', {
         // data: getRandom(req.session.data) 

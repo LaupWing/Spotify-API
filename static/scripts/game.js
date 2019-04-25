@@ -1,7 +1,7 @@
 const socket = io();
 socket.emit('logged in')
 let time = 0
-
+let flag = true
 function startTimer(){
     window.timer = setInterval(()=>{
         time++
@@ -65,10 +65,6 @@ function setTrack(track){
     createAudioElement(track.preview_url)
     document.querySelector('form#player_answer').addEventListener('submit',playersAnswer)
     document.querySelector('main .track_reveal-container img').src=track.albumImg
-    console.log('Rendered Track')
-    console.log(document.querySelector('#media audio source').src)
-    console.log(document.querySelector('.song_name').textContent,document.querySelector('.artist_name').textContent)
-    // staring Countdown
     startingAnimation()
 }
 
@@ -147,8 +143,21 @@ function revealTrack(){
         document.querySelector('main #time_is_up p:first-of-type').classList.remove('start')
     },3000)
     document.querySelector('main svg#Face').classList.add('reveal')
+    document.querySelector('main svg#Face').addEventListener('transitionend', revealResults)
+}
+
+function revealResults(){
+    const container = document.getElementById('results')
+    setTimeout(()=>{
+        document.querySelector('main svg#Face').removeEventListener('transitionend', revealResults)
+        container.classList.add('start')
+    },1000)
     setTimeout(()=>{
         nextSong()
+        socket.emit('reset results')
+        flag = true
+        container.classList.remove('start')
+        removeElements(container)
     },8000)
 }
 
@@ -181,24 +190,17 @@ function getTrackEmit(){
 
 function playersAnswer(){
     event.preventDefault()
+    console.log('submit event')
     let artist = document.querySelector('input[type="text"].artist_input').value
     let song = document.querySelector('input[type="text"].song_input').value
     // console.log(artist, song)
     if(artist === '' && song === ''){
+        console.log('IF in playerAnswer function')
         socket.emit('idunno')
-        socket.on('userDoesntKnow', (name)=>{
-            artist = name
-            song = 'I dont know this track'
-            const answer = {
-                time,
-                artist,
-                song
-            }
-            compareAnswerToSolution(answer)
-            answerMiddleware(answer)
-        })
+        socket.on('userDoesntKnow', (name)=>userDoesntKnow(name))
     }
     else{
+        console.log('ELSE in playerAnswer function')
         const answer = {
             time,
             artist,
@@ -208,6 +210,23 @@ function playersAnswer(){
         answerMiddleware(answer)
     }
 }
+
+function userDoesntKnow(name){
+    console.log('Server has send the name')
+    if(flag){
+        flag = false
+        artist = name
+        song = 'I dont know this track'
+        const answer = {
+            time,
+            artist,
+            song
+        }
+        compareAnswerToSolution(answer)
+        answerMiddleware(answer)
+    }
+}
+
 
 function answerMiddleware(answer){
     resetTimer()
@@ -228,9 +247,8 @@ function removeFormItems(){
 }
 
 function renderingResults(results){
-    console.log(results)
+    results = Array.from(results)
     const container = document.getElementById('results')
-    container.classList.add('start');
     results.forEach(result=>{
         const div = document.createElement('div')
         const h2 = document.createElement('h2')
@@ -239,7 +257,6 @@ function renderingResults(results){
         h2.textContent = result.name
         p.textContent = `${result.answer.input.artist} - ${result.answer.input.song}  time: ${result.answer.time}`
         p2.textContent = result.answer.points
-
         div.appendChild(h2)
         div.appendChild(p)
         div.appendChild(p2)
@@ -311,7 +328,9 @@ function compareAnswerToSolution(answer){
                 song: answer.song
             }
         }
+        console.log('Answer is emitting to Server', playerResult.points)
         socket.emit('answer', playerResult)
+        return
     }
     else if(replaceSomeChar(sliceOutPandD(song_name))==answer.song.toLowerCase() || replaceSomeChar(sliceAfterComma(sliceOutPandD(artist_name))) == answer.artist.toLowerCase()){
         const playerResult = {
@@ -322,7 +341,9 @@ function compareAnswerToSolution(answer){
                 song: answer.song
             }
         }
+        console.log('Answer is emitting to Server', playerResult.points)
         socket.emit('answer', playerResult)
+        return
     }
     else{
         console.log('PLayer has everything wrong')
@@ -334,6 +355,7 @@ function compareAnswerToSolution(answer){
                 song: answer.song
             }
         }
+        console.log('Answer is emitting to Server', playerResult.points)
         socket.emit('answer', playerResult) 
     }
 }
