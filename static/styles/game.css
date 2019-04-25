@@ -116,6 +116,9 @@ ul#users li{
     border-bottom: #535353 1px solid;
     padding: 5px;
 }
+ul#users li div{
+    margin-left: 10px
+}
 ul#users li img{
     border-radius: 50%;
     width: 50px
@@ -123,7 +126,6 @@ ul#users li img{
 ul#users li h2{
     font-size: 16px;
     font-weight: 100;
-    margin-left: 10px
 }
 .userSelf{
     background: #1DB954;

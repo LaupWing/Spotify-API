@@ -30,6 +30,7 @@ function createGameEnviroment(users){
     const newElement = '<main class="container"><div id="time_is_up"><h2>Time is up<h2><p>The Answer is</p></div><div id="media"></div><div id="results"></div><div class="track_guess"><h2>Track starts in</h2><div class="readyMsg"></div></div><div class="track_reveal-container"><img></img><div class="track-reveal"><h2 class="artist_name"></h2><p class="song_name"></p></div></div></main><form id="player_answer"><div class="answer-container"><div class="answer"><h2>Artist</h2><input class="artist_input" type="text"><p class="user_artist_guess"></p></div><p>-</p><div class="answer"><h2>Song</h2><input class="song_input" type="text"><p class="user_song_guess"></p></div></div><button>confirm</button></form><ul id="users"></ul>'
     body.insertAdjacentHTML('beforeend', newElement)
     addingItemsToUL(document.getElementById('users'), users)
+    addScoreElement()
     const audioTime = '<div class="audio_time"></div>'
     document.querySelector('.track_guess').insertAdjacentHTML('beforeend', audioTime)
     setUpSVG()
@@ -42,6 +43,15 @@ function setUserIndicator(id){
         if(li.id === id){
             li.classList.add('userSelf')
         }
+    })
+}
+
+function addScoreElement(){
+    const all_li = document.querySelectorAll('#users li')
+    all_li.forEach(li=>{
+        const p = document.createElement('p')
+        p.textContent = 0
+        li.querySelector('div').insertAdjacentElement('beforeend', p)
     })
 }
 
@@ -150,6 +160,7 @@ function revealResults(){
     const container = document.getElementById('results')
     setTimeout(()=>{
         document.querySelector('main svg#Face').removeEventListener('transitionend', revealResults)
+        socket.emit('request results')
         container.classList.add('start')
     },1000)
     setTimeout(()=>{
@@ -261,6 +272,13 @@ function renderingResults(results){
         div.appendChild(p)
         div.appendChild(p2)
         container.insertAdjacentElement('beforeend', div)
+        document.querySelectorAll('#users li').forEach(li=>{
+            if(li.id === result.id){
+                const currentScore = li.querySelector('div p').textContent
+                const newScore = (result.answer.points + Number(currentScore))
+                li.querySelector('div p').textContent = newScore
+            }
+        })
     })
 }
 
@@ -397,8 +415,10 @@ function addingItemsToUL(ul, array){
         img.src = user.imageUrl
         const h2 = document.createElement('h2')
         h2.innerText = user.name
+        const div = document.createElement('div')
+        div.appendChild(h2)
         li.appendChild(img)
-        li.appendChild(h2)
+        li.appendChild(div)
         ul.insertAdjacentElement('beforeend', li)
     })
 }

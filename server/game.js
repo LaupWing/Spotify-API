@@ -7,6 +7,8 @@ let answers = []
 const {getData} = require('./helper')
 const {getRandom} = require('./helper')
 const {onlyUnique} = require('./helper')
+let flag = true
+
 
 router.get('/', async(req,res)=>{
     const io = req.app.get('socketio')
@@ -63,7 +65,7 @@ router.get('/', async(req,res)=>{
     }
 
     function playerIsReady(socket_id){
-        console.log('Player is ready')
+        // console.log('Player is ready')
         playersReadyArray.push(socket_id)
         const playerObj = {
             users,
@@ -77,28 +79,29 @@ router.get('/', async(req,res)=>{
     }
 
     function getTrack(socket_id){
-        emittingArray = []
         // resetArray(askTrack, socket_id)
         emittingArray.push(socket_id)
-        console.log(`Requesting track by ${socket_id}`)
-        onlyFirstUserEmits(()=>io.emit('send track', getRandom(req.session.data)))
+        // console.log(`Requesting track by ${socket_id}`)
+        onlyFirstUserEmits(socket_id,()=>{
+            io.emit('send track', getRandom(req.session.data))
+        })
     }
     function getName(socket_id){
-        console.log('Getting the name')
+        // console.log('Getting the name')
         return users
         .filter(user=>user.socketId === socket_id)
         .map(user=>user.name)
         
     }
     
-    function onlyFirstUserEmits(action){
-        emittingArray.forEach(asker=>{
-            if(users[0].socketId === asker){
+    function onlyFirstUserEmits(id, action){
+        console.log(emittingArray, users[0].socketId)
+        // emittingArray.forEach(asker=>{
+            if(users[0].socketId === id){
                 console.log('---------------------->>')
-                console.log(asker, ' is sending a track')
                 action()
             }
-        })
+        // })
     }
 
     function resetArray(array){
@@ -110,17 +113,22 @@ router.get('/', async(req,res)=>{
             name: users
                 .filter(user=>user.socketId===id)
                 .map(user=>user.name)[0],
-            answer
+            answer,
+            id 
         })
-        console.log('Anwswers Array',answers)
+        // console.log('Anwswers Array',answers)
+    }
+    
+    function renderingResults(){
         if(answers.length === users.length){
             console.log('emittttting results')
+            emittingArray = []
             io.emit('sending results', answers)
         }
     }
 
     function idontfkingknow(socket_id){
-        console.log('i dont fking know')
+        // console.log('i dont fking know')
         return getName(socket_id)[0]
     }
 
@@ -137,7 +145,8 @@ router.get('/', async(req,res)=>{
         socket.on('get track',()=>getTrack(socket.id))
         socket.on('idunno', ()=>socket.emit('userDoesntKnow',idontfkingknow(socket.id)))
         socket.on('answer',(answer)=>{gettinResults(answer, socket.id)})
-        socket.on('reset results',()=>onlyFirstUserEmits(()=>resetArray(answers)))
+        socket.on('reset results',()=>resetArray(answers))
+        socket.on('request results',()=>onlyFirstUserEmits(socket.id,()=>renderingResults()))
     })
     res.render('game', {
         // data: getRandom(req.session.data) 
