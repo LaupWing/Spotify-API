@@ -115,7 +115,7 @@ router.get('/', async(req,res)=>{
     }
     
     function renderingResults(){
-        console.log(answers.length === users.length)
+        console.log(answers.length, users.length)
         if(answers.length === users.length){
             console.log('emitting results')
             emittingArray = []
@@ -139,7 +139,7 @@ router.get('/', async(req,res)=>{
         socket.on('ready', ()=>playerIsReady(socket.id))
         socket.on('get track',()=>getTrack(socket.id))
         socket.on('idunno', ()=>socket.emit('userDoesntKnow',idontfkingknow(socket.id)))
-        socket.on('+',(answer)=>{gettinResults(answer, socket.id)})
+        socket.on('answer',(answer)=>{gettinResults(answer, socket.id)})
         socket.on('reset results',()=>resetArray(answers))
         socket.on('request results',()=>onlyFirstUserEmits(socket.id,()=>renderingResults()))
     })

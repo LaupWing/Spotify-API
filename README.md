@@ -9,6 +9,9 @@ A game which the players have guess the song. The first person who has guessed t
 * [API](#api-)
     * [OAuth](#oauth)
     * [Data Flow](#data-flow)
+* [Game Instructions](#game-instructions-)
+    * [Begin Screen](#begin-screen)
+    * [Waiting room](#waiting-room)
 
 ## Installing 
 Instructions:
@@ -54,13 +57,21 @@ On the landing page the websites ask the user to login with his/her Spotify acco
 ### Waiting room
 In this page the user has to wait(or not) for other players to enter the game. The player can play by his/herself by clicking on the `IM READY` button before anyone enters the waiting room. If a player is barely visible that means that they didn't clicked the `IM READY` button yet.
 ![Data Flow](README_images/WaitingRoom.gif)
-##
 
-| Points | Order guessed |
+### Game Interface
+When every player in the waiting room has clicked on the `IM READY` button then the game interface will load. In this screen the player has to wait till the countdown is till zero before the first track will start. While the music is playing there will be a little animation playing for a visual clue that the track has started or is playing.
+![Data Flow](README_images/GameCountdown.gif)
+
+After the preview of the track the user gets 15s to guess the artist name and the song name of te track. After the 15s the track will be revealed and the user cant give his/her answwer anymore. Every track that was played untill now will be displayed on the rightside of the interface
+![Data Flow](README_images/RevealTrack.gif)
+
+
+#### Points System
+| Points | Guessed |
 |--------|:-------------:|
-| 1000   |     First     |
-| 900    |     Second    |
-| 800    |     Third     |
+| 1000   |     Artist And Song     |
+| 500    |     Song or Artist    |
+| 0      |     nothing     |
 
 
 
