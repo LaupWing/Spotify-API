@@ -7,7 +7,6 @@ let answers = []
 const {getData} = require('./helper')
 const {getRandom} = require('./helper')
 const {onlyUnique} = require('./helper')
-let flag = true
 
 
 router.get('/', async(req,res)=>{
@@ -95,13 +94,10 @@ router.get('/', async(req,res)=>{
     }
     
     function onlyFirstUserEmits(id, action){
-        console.log(emittingArray, users[0].socketId)
-        // emittingArray.forEach(asker=>{
-            if(users[0].socketId === id){
-                console.log('---------------------->>')
-                action()
-            }
-        // })
+        if(users[0].socketId === id){
+            console.log('---------------------->>')
+            action()
+        }
     }
 
     function resetArray(array){
@@ -116,7 +112,6 @@ router.get('/', async(req,res)=>{
             answer,
             id 
         })
-        // console.log('Anwswers Array',answers)
     }
     
     function renderingResults(){
@@ -128,7 +123,6 @@ router.get('/', async(req,res)=>{
     }
 
     function idontfkingknow(socket_id){
-        // console.log('i dont fking know')
         return getName(socket_id)[0]
     }
 

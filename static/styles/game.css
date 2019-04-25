@@ -90,6 +90,44 @@ button:focus{
     margin-left: 20px;
 }
 
+/* Recently playes songs 
+############################*/
+#track_list{
+    width: 250px;
+    border-left: solid 5px #535353;
+    background: #212121;
+    height: 80%;
+    position: fixed;
+    right: 0;
+    color: white;
+    padding: 10px;
+    top: 0;
+    overflow-y: scroll;
+}
+#track_list .track_container{
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    margin: 10px 0;
+    transition: .5s;
+}
+#track_list .track_container .media_container{
+    width: 30%;
+} 
+#track_list .track_container .media_container img{
+    width: 100%;
+    border-radius: 50%;
+}
+#track_list .track_container .info_container{
+    width: 65%;
+    right: 0;
+} 
+#track_list .track_container .info_container h3{
+    color: #1DB954;
+} 
+
+
 
 /* Currently Online Users 
 ############################*/

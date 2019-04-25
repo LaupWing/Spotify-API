@@ -40,7 +40,11 @@ svg#play_btn.start{
     animation: rotate 5s forwards infinite linear;
 }
 
-
+#track_list .track_container.start{
+    opacity: 0;
+    transform: translate(0,50%);
+    height: 0;
+}
 
 /* Form Transitions
 -------------------*/

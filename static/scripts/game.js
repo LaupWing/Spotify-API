@@ -17,7 +17,7 @@ socket.on('start game', users=>createGameEnviroment(users))
 socket.on('fill waiting room', users=>addingItemsToUL(document.querySelector('#waiting_room .wrapper'), users))
 socket.on('player ready', obj=>setPlayersReady(obj)) 
 socket.on('user indicator', id=>setUserIndicator(id))
-socket.on('send track', track=>setTrack(track))
+socket.on('send track', track=>sendTrackTo(track))
 socket.on('guess', (track)=>{})
 socket.on('sending results', results=>renderingResults(results))
 
@@ -27,7 +27,7 @@ function createGameEnviroment(users){
     // console.log(`Rendering Users... ${users}`)
     const body = document.body
     removeElements(body)
-    const newElement = '<main class="container"><div id="time_is_up"><h2>Time is up<h2><p>The Answer is</p></div><div id="media"></div><div id="results"></div><div class="track_guess"><h2>Track starts in</h2><div class="readyMsg"></div></div><div class="track_reveal-container"><img></img><div class="track-reveal"><h2 class="artist_name"></h2><p class="song_name"></p></div></div></main><form id="player_answer"><div class="answer-container"><div class="answer"><h2>Artist</h2><input class="artist_input" type="text"><p class="user_artist_guess"></p></div><p>-</p><div class="answer"><h2>Song</h2><input class="song_input" type="text"><p class="user_song_guess"></p></div></div><button>confirm</button></form><ul id="users"></ul>'
+    const newElement = '<main class="container"><div id="time_is_up"><h2>Time is up<h2><p>The Answer is</p></div><div id="media"></div><div id="results"></div><div class="track_guess"><h2>Track starts in</h2><div class="readyMsg"></div></div><div class="track_reveal-container"><img></img><div class="track-reveal"><h2 class="artist_name"></h2><p class="song_name"></p></div></div></main><form id="player_answer"><div class="answer-container"><div class="answer"><h2>Artist</h2><input class="artist_input" type="text"><p class="user_artist_guess"></p></div><p>-</p><div class="answer"><h2>Song</h2><input class="song_input" type="text"><p class="user_song_guess"></p></div></div><button>confirm</button></form><ul id="users"></ul><ul id="track_list"></ul>'
     body.insertAdjacentHTML('beforeend', newElement)
     addingItemsToUL(document.getElementById('users'), users)
     addScoreElement()
@@ -67,7 +67,12 @@ function setPlayersReady(obj){
     })
 }
 
-function setTrack(track){
+function sendTrackTo(track){
+    setTrackRevealEl(track)
+    setTrackListEl(track)
+}
+
+function setTrackRevealEl(track){
     // console.log('Setting up track enviroment')
     // console.log(track)
     document.querySelector('.song_name').textContent = track.songName
@@ -76,6 +81,39 @@ function setTrack(track){
     document.querySelector('form#player_answer').addEventListener('submit',playersAnswer)
     document.querySelector('main .track_reveal-container img').src=track.albumImg
     startingAnimation()
+}
+
+function setTrackListEl(track){
+    const list = document.querySelector('#track_list')
+    const container = document.createElement('div')
+    container.classList.add('track_container', 'start')
+    const info = document.createElement('div')
+    info.classList.add('info_container')
+    const media = document.createElement('div')
+    media.classList.add('media_container')
+    const img = document.createElement('img')
+    const artist = document.createElement('h3')
+    const song = document.createElement('p')
+    const audio = document.createElement('audio')
+    const source = document.createElement('source')
+
+    img.src = track.albumImg
+    source.setAttribute('src', track.preview_url);
+    source.setAttribute('type', 'audio/mpeg');
+    // audio.setAttribute('controls', 'controls');
+    audio.appendChild(source)
+    media.appendChild(audio)
+    media.appendChild(img)
+
+    artist.textContent = track.artist.join(', ')
+    song.textContent = track.songName
+    info.appendChild(artist)
+    info.appendChild(song)
+
+    container.appendChild(media)
+    container.appendChild(info)
+
+    list.insertAdjacentElement('beforeend', container)
 }
 
 function createAudioElement(src){
@@ -117,8 +155,8 @@ function startTrack(){
     document.querySelector('main .track_guess svg#play_btn').classList.add('start')
     document.querySelector('main .track_guess .audio_time').classList.add('start')
     document.querySelector('audio').play()
+    startTimer()
     setTimeout(()=>{
-        startTimer()
         endOfTrack()
     },5000)
 }
@@ -157,6 +195,9 @@ function revealTrack(){
 }
 
 function revealResults(){
+    const tracklist = document.querySelectorAll('#track_list .track_container')
+    tracklist[tracklist.length-1].classList.remove('start')
+
     const container = document.getElementById('results')
     setTimeout(()=>{
         document.querySelector('main svg#Face').removeEventListener('transitionend', revealResults)
@@ -164,11 +205,13 @@ function revealResults(){
         container.classList.add('start')
     },1000)
     setTimeout(()=>{
-        nextSong()
         socket.emit('reset results')
         flag = true
         container.classList.remove('start')
-        removeElements(container)
+        setTimeout(()=>{
+            nextSong()
+            removeElements(container)
+        },1000)
     },8000)
 }
 
@@ -219,6 +262,7 @@ function playersAnswer(){
         }
         compareAnswerToSolution(answer)
         answerMiddleware(answer)
+        resetTimer()
     }
 }
 
@@ -235,12 +279,12 @@ function userDoesntKnow(name){
         }
         compareAnswerToSolution(answer)
         answerMiddleware(answer)
+        resetTimer()
     }
 }
 
 
 function answerMiddleware(answer){
-    resetTimer()
     // After the form has removed it items this functions will start
     // I can do it with a transitionend but that was way more work
     // Becaause i have to remove the transition also with transitionend

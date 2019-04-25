@@ -1,5 +1,5 @@
 const fetch = require('node-fetch')
-const randomNumbersArray = []
+let randomNumbersArray = []
 
 function getData(settings){
     return fetch(`https://api.spotify.com/v1/${settings.endpoint}`, 
@@ -55,7 +55,8 @@ function getRandom(array){
             }
         }
     }
-    console.log(array[number])
+    if(randomNumbersArray.length === array.length) randomNumbersArray = []
+    console.log(randomNumbersArray)
     return array[number]
 }
 
