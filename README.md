@@ -12,6 +12,8 @@ A game which the players have guess the song. The first person who has guessed t
 * [Game Instructions](#game-instructions-)
     * [Begin Screen](#begin-screen)
     * [Waiting room](#waiting-room)
+    * [Game Interface](#game-interface)
+* [To Do List](#to-do-list-)
 
 ## Installing 
 Instructions:
@@ -74,7 +76,8 @@ After the preview of the track the user gets 15s to guess the artist name and th
 | 0      |     nothing     |
 
 
-
-
-## Feedback
-Dont know yet
+## To Do List
+- [ ] Make socket.rooms for x amount of players
+- [ ] Better answer comparison system (Dont count the space as answer)
+- [ ] Handle the buggs (sometimes a weird bug occures)
+- [ ] Mobile responsive
