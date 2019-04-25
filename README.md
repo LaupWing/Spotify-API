@@ -62,7 +62,7 @@ In this page the user has to wait(or not) for other players to enter the game. T
 When every player in the waiting room has clicked on the `IM READY` button then the game interface will load. In this screen the player has to wait till the countdown is till zero before the first track will start. While the music is playing there will be a little animation playing for a visual clue that the track has started or is playing.
 ![Data Flow](README_images/GameCountdown.gif)
 
-After the preview of the track the user gets 15s to guess the artist name and the song name of te track. After the 15s the track will be revealed and the user cant give his/her answwer anymore. Every track that was played untill now will be displayed on the rightside of the interface
+After the preview of the track the user gets 15s to guess the artist name and the song name of te track. After the 15s the track will be revealed and the user cant give his/her answwer anymore. And the results will be displayed right after the reveal. Every track that was played untill now will be displayed on the rightside of the interface
 ![Data Flow](README_images/RevealTrack.gif)
 
 
