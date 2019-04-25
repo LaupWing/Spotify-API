@@ -19,14 +19,15 @@ socket.on('player ready', obj=>setPlayersReady(obj))
 socket.on('user indicator', id=>setUserIndicator(id))
 socket.on('send track', track=>setTrack(track))
 socket.on('guess', (track)=>{})
+socket.on('sending results', results=>renderingResults(results))
 
 // Functions that are called by the socket events.
 // -------------------
 function createGameEnviroment(users){
-    console.log(`Rendering Users... ${users}`)
+    // console.log(`Rendering Users... ${users}`)
     const body = document.body
     removeElements(body)
-    const newElement = '<main class="container"><div id="time_is_up"><h2>Time is up<h2><p>The Answer is</p></div><div id="media"></div><div class="track_guess"><h2>Track starts in</h2><div class="readyMsg"></div></div><div class="track_reveal-container"><img></img><div class="track-reveal"><h2 class="artist_name"></h2><p class="song_name"></p></div></div></main><form id="player_answer"><div class="answer-container"><div class="answer"><h2>Artist</h2><input class="artist_input" type="text"><p class="user_artist_guess"></p></div><p>-</p><div class="answer"><h2>Song</h2><input class="song_input" type="text"><p class="user_song_guess"></p></div></div><button>confirm</button></form><ul id="users"></ul>'
+    const newElement = '<main class="container"><div id="time_is_up"><h2>Time is up<h2><p>The Answer is</p></div><div id="media"></div><div id="results"></div><div class="track_guess"><h2>Track starts in</h2><div class="readyMsg"></div></div><div class="track_reveal-container"><img></img><div class="track-reveal"><h2 class="artist_name"></h2><p class="song_name"></p></div></div></main><form id="player_answer"><div class="answer-container"><div class="answer"><h2>Artist</h2><input class="artist_input" type="text"><p class="user_artist_guess"></p></div><p>-</p><div class="answer"><h2>Song</h2><input class="song_input" type="text"><p class="user_song_guess"></p></div></div><button>confirm</button></form><ul id="users"></ul>'
     body.insertAdjacentHTML('beforeend', newElement)
     addingItemsToUL(document.getElementById('users'), users)
     const audioTime = '<div class="audio_time"></div>'
@@ -45,7 +46,7 @@ function setUserIndicator(id){
 }
 
 function setPlayersReady(obj){
-    console.log('Rendering Players Ready')
+    // console.log('Rendering Players Ready')
     addingItemsToUL(document.querySelector('#waiting_room .wrapper'), obj.users)
     document.querySelectorAll('#waiting_room li').forEach(li=>{
         obj.playersReadyArray.forEach(id=>{
@@ -57,8 +58,8 @@ function setPlayersReady(obj){
 }
 
 function setTrack(track){
-    console.log('Setting up track enviroment')
-    console.log(track)
+    // console.log('Setting up track enviroment')
+    // console.log(track)
     document.querySelector('.song_name').textContent = track.songName
     document.querySelector('.artist_name').textContent = track.artist.join(', ')
     createAudioElement(track.preview_url)
@@ -67,7 +68,6 @@ function setTrack(track){
     console.log('Rendered Track')
     console.log(document.querySelector('#media audio source').src)
     console.log(document.querySelector('.song_name').textContent,document.querySelector('.artist_name').textContent)
-    startTimer()
     // staring Countdown
     startingAnimation()
 }
@@ -104,7 +104,7 @@ function startingAnimation(){
 
 function startTrack(){
     // Start Track
-    console.log('Starting Track')
+    // console.log('Starting Track')
     document.querySelector('main .track_guess h2').innerText = 'Guess the track'
     document.querySelector('main .track_guess .readyMsg').classList.add('invisible')
     document.querySelector('main .track_guess svg#play_btn_arrow #Playbutton').classList.remove('transparent')
@@ -112,6 +112,7 @@ function startTrack(){
     document.querySelector('main .track_guess .audio_time').classList.add('start')
     document.querySelector('audio').play()
     setTimeout(()=>{
+        startTimer()
         endOfTrack()
     },5000)
 }
@@ -128,7 +129,7 @@ function endOfTrack(){
 
 function endOfTrackBridge(){
     timeEnded()
-    playersAnswer()
+    if(document.querySelector('form button.start') === null)playersAnswer()
 }
 
 function timeEnded(){
@@ -182,7 +183,7 @@ function playersAnswer(){
     event.preventDefault()
     let artist = document.querySelector('input[type="text"].artist_input').value
     let song = document.querySelector('input[type="text"].song_input').value
-    console.log(artist, song)
+    // console.log(artist, song)
     if(artist === '' && song === ''){
         socket.emit('idunno')
         socket.on('userDoesntKnow', (name)=>{
@@ -193,6 +194,7 @@ function playersAnswer(){
                 artist,
                 song
             }
+            compareAnswerToSolution(answer)
             answerMiddleware(answer)
         })
     }
@@ -202,6 +204,7 @@ function playersAnswer(){
             artist,
             song
         }
+        compareAnswerToSolution(answer)
         answerMiddleware(answer)
     }
 }
@@ -214,7 +217,6 @@ function answerMiddleware(answer){
     setTimeout(()=>{
         renderAnswer(answer)
     },1000)
-    compareAnswerToSolution(answer)
     removeFormItems()
 }
 
@@ -222,6 +224,26 @@ function removeFormItems(){
     setFormItems({
         action: 'add',
         disable: true
+    })
+}
+
+function renderingResults(results){
+    console.log(results)
+    const container = document.getElementById('results')
+    container.classList.add('start');
+    results.forEach(result=>{
+        const div = document.createElement('div')
+        const h2 = document.createElement('h2')
+        const p = document.createElement('p')
+        const p2 = document.createElement('p')
+        h2.textContent = result.name
+        p.textContent = `${result.answer.input.artist} - ${result.answer.input.song}  time: ${result.answer.time}`
+        p2.textContent = result.answer.points
+
+        div.appendChild(h2)
+        div.appendChild(p)
+        div.appendChild(p2)
+        container.insertAdjacentElement('beforeend', div)
     })
 }
 
@@ -262,28 +284,65 @@ function setFormItems(setting){
     const submitBtn = document.querySelector('form button')
 
     inputs.forEach(input=>{
-        console.log(input)
-        if(!setting.disable) input.value = ''
         input.classList[setting.action]('start')
-        input.setAttribute('disabled', setting.disable)
+
+        if(!setting.disable)    input.value = ''
+        if(setting.disable)     input.setAttribute('disabled', setting.disable)
+        else                    input.removeAttribute('disabled')
     })
+    
     submitBtn.classList[setting.action]('start')
-    submitBtn.setAttribute('disabled', setting.disable)
+
+    if(setting.disable)  submitBtn.setAttribute('disabled', setting.disable)
+    else                submitBtn.removeAttribute('disabled')
 }
 
 function compareAnswerToSolution(answer){
     const artist_name = document.querySelector('h2.artist_name').innerText
     const song_name = document.querySelector('p.song_name').innerText
-    console.log(artist_name,song_name)
-    console.log(replaceSomeChar(artist_name))
-    console.log(replaceSomeChar(sliceOutParanthesis(song_name)))
+    console.log('checking answer for emit')
+    console.log(answer)
+    if(replaceSomeChar(sliceOutPandD(song_name))==answer.song.toLowerCase() && replaceSomeChar(sliceAfterComma(sliceOutPandD(artist_name))) == answer.artist.toLowerCase()){
+        const playerResult = {
+            time: answer.time,
+            points: 1000,
+            input:{
+                artist: answer.artist,
+                song: answer.song
+            }
+        }
+        socket.emit('answer', playerResult)
+    }
+    else if(replaceSomeChar(sliceOutPandD(song_name))==answer.song.toLowerCase() || replaceSomeChar(sliceAfterComma(sliceOutPandD(artist_name))) == answer.artist.toLowerCase()){
+        const playerResult = {
+            time: answer.time,
+            points: 500,
+            input:{
+                artist: answer.artist,
+                song: answer.song
+            }
+        }
+        socket.emit('answer', playerResult)
+    }
+    else{
+        console.log('PLayer has everything wrong')
+        const playerResult = {
+            time: answer.time,
+            points: 0,
+            input:{
+                artist: answer.artist,
+                song: answer.song
+            }
+        }
+        socket.emit('answer', playerResult) 
+    }
 }
 
 
 // Helper functions
 // -------------------
 function replaceSomeChar(string){
-    const allChar = [',', '(', ')', '.', "'", '!']
+    const allChar = ['(', ')', '.', '!', '*']
     const result = [...string].map(letter=>{
             if(allChar.includes(letter)){
                 return letter.replace(letter, '')
@@ -293,10 +352,18 @@ function replaceSomeChar(string){
         }) 
     return result.join('').toLowerCase().trim()
 }
-function sliceOutParanthesis(string){
+function sliceOutPandD(string){
     const index = string.indexOf('(')
-    if(index === -1) return string
-    return string.slice(0, index)
+    const index2 = string.indexOf('-')
+    if(index !== -1)    return string.slice(0, index).trim()
+    if(index2 !== -1)   return string.slice(0, index2).trim()
+    return string.trim()                
+}
+
+function sliceAfterComma(string){
+    const index = string.indexOf(',')
+    if(index !== -1) return string.slice(0,index).trim()
+    return string
 }
 
 function addingItemsToUL(ul, array){

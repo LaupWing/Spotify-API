@@ -179,6 +179,20 @@ main svg{
     z-index: 2000;
     transition: 2s;
 }
+main #results{
+    width: 50%;
+    background: #1DB954;
+    position: absolute;
+    z-index: 1000000;
+    left: 0;
+    bottom: -100%;
+    transition: 1s;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 main svg#Face{
     z-index: 3000;
 }

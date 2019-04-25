@@ -68,6 +68,12 @@ form .answer-container .user_song_guess.start{
     transition: .5s;
 }
 
+/* Result Transition
+-------------------*/
+#results.start{
+    transform: translate(0,-100%);
+}
+
 @keyframes progressBar5s{
     0%{
         width: 0;
