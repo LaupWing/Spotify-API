@@ -120,7 +120,7 @@ router.get('/', async(req,res)=>{
             console.log('emitting results')
             emittingArray = []
             io.emit('sending results', answers)
-        }
+        }else if(answer.length >0) io.emit('sending results', answers)
     }
 
     function idontfkingknow(socket_id){

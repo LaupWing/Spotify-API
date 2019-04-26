@@ -4,8 +4,8 @@
   "description": "A game which the players have guess the song. The first person who has guessed the song wins the round. Every game has 10 rounds.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server/server.js"
+      "start": "node server/server.js"
+
   },
   "repository": {
     "type": "git",
