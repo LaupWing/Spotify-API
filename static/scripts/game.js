@@ -73,8 +73,6 @@ function sendTrackTo(track){
 }
 
 function setTrackRevealEl(track){
-    // console.log('Setting up track enviroment')
-    // console.log(track)
     document.querySelector('.song_name').textContent = track.songName
     document.querySelector('.artist_name').textContent = track.artist.join(', ')
     createAudioElement(track.preview_url)
