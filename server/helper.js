@@ -2,6 +2,7 @@ const fetch = require('node-fetch')
 let randomNumbersArray = []
 
 function getData(settings){
+    console.log(settings.acces_token, 'Getting data')
     return fetch(`https://api.spotify.com/v1/${settings.endpoint}`, 
     {
         headers:

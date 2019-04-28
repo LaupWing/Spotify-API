@@ -18,7 +18,7 @@ router.get('/', async(req,res)=>{
         acces_token     :   req.session.acces_token,
         output          :   'items'
     })
-
+    
     const name = await getData({
         endpoint        :   'me',
         acces_token     :   req.session.acces_token,
@@ -74,7 +74,6 @@ router.get('/', async(req,res)=>{
         if(playersReadyArray.length === users.length){
             io.emit('start game', onlyUnique('socketId',users))
         }
-        console.log(playersReadyArray.length, users.length)
     }
 
     function getTrack(socket_id){
@@ -86,7 +85,6 @@ router.get('/', async(req,res)=>{
         })
     }
     function getName(socket_id){
-        // console.log('Getting the name')
         return users
         .filter(user=>user.socketId === socket_id)
         .map(user=>user.name)
@@ -116,11 +114,12 @@ router.get('/', async(req,res)=>{
     
     function renderingResults(){
         console.log(answers.length, users.length)
+        console.log(answers)
         if(answers.length === users.length){
             console.log('emitting results')
             emittingArray = []
             io.emit('sending results', answers)
-        }else if(answer.length >0) io.emit('sending results', answers)
+        }else if(answers.length >0) io.emit('sending results', answers)
     }
 
     function idontfkingknow(socket_id){

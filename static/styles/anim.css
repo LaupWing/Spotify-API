@@ -13,7 +13,7 @@ main #time_is_up p.start{
     animation-delay: 3s;
 }
 .audio_time.start{
-    animation: progressBar5s 5s forwards; 
+    animation: progressBar5s 5s forwards linear; 
 }
 .readyMsg.start::after{
     animation: startCounter 7s forwards;

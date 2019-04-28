@@ -153,9 +153,9 @@ function startTrack(){
     document.querySelector('main .track_guess svg#play_btn').classList.add('start')
     document.querySelector('audio').play()
     startTimer()
+    document.querySelector('main .track_guess .audio_time').classList.add('start')
     setTimeout(()=>{
         endOfTrack()
-         document.querySelector('main .track_guess .audio_time').classList.add('start')
     },5000)
 }
 
