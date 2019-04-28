@@ -151,11 +151,11 @@ function startTrack(){
     document.querySelector('main .track_guess .readyMsg').classList.add('invisible')
     document.querySelector('main .track_guess svg#play_btn_arrow #Playbutton').classList.remove('transparent')
     document.querySelector('main .track_guess svg#play_btn').classList.add('start')
-    document.querySelector('main .track_guess .audio_time').classList.add('start')
     document.querySelector('audio').play()
     startTimer()
     setTimeout(()=>{
         endOfTrack()
+         document.querySelector('main .track_guess .audio_time').classList.add('start')
     },5000)
 }
 
@@ -374,6 +374,8 @@ function setFormItems(setting){
     else                submitBtn.removeAttribute('disabled')
 }
 
+
+
 function compareAnswerToSolution(answer){
     const artist_name = document.querySelector('h2.artist_name').innerText
     const song_name = document.querySelector('p.song_name').innerText
@@ -423,6 +425,7 @@ function compareAnswerToSolution(answer){
 
 // Helper functions
 // -------------------
+
 function replaceSomeChar(string){
     const allChar = ['(', ')', '.', '!', '*']
     const result = [...string].map(letter=>{
