@@ -377,46 +377,33 @@ function setFormItems(setting){
 
 
 function compareAnswerToSolution(answer){
-    const artist_name = document.querySelector('h2.artist_name').innerText
-    const song_name = document.querySelector('p.song_name').innerText
-    console.log('checking answer for emit')
-    console.log(answer)
-    if(replaceSomeChar(sliceOutPandD(song_name))==answer.song.toLowerCase() && replaceSomeChar(sliceAfterComma(sliceOutPandD(artist_name))) == answer.artist.toLowerCase()){
-        const playerResult = {
-            time: answer.time,
-            points: 1000,
-            input:{
-                artist: answer.artist,
-                song: answer.song
-            }
+    const artist_name           = document.querySelector('h2.artist_name').innerText
+    const song_name             = document.querySelector('p.song_name').innerText
+    const formatted_song_name   = replaceSomeChar(sliceOutPandD(song_name))
+    const formatted_artist_name = replaceSomeChar(sliceAfterComma(sliceOutPandD(artist_name)))
+    const song_name_correct     = formatted_song_name==answer.song.toLowerCase()
+    const artist_name_correct   = formatted_artist_name == answer.artist.toLowerCase()
+    const playerResult = {
+        time: answer.time,
+        input:{
+            artist: answer.artist,
+            song: answer.song
         }
+    }
+    if(song_name_correct && artist_name_correct){
         console.log('Answer is emitting to Server', playerResult.points)
+        playerResult.points = 1000
         socket.emit('answer', playerResult)
         return
     }
-    else if(replaceSomeChar(sliceOutPandD(song_name))==answer.song.toLowerCase() || replaceSomeChar(sliceAfterComma(sliceOutPandD(artist_name))) == answer.artist.toLowerCase()){
-        const playerResult = {
-            time: answer.time,
-            points: 500,
-            input:{
-                artist: answer.artist,
-                song: answer.song
-            }
-        }
+    else if(song_name_correct || artist_name_correct){
+        playerResult.points = 500
         console.log('Answer is emitting to Server', playerResult.points)
         socket.emit('answer', playerResult)
         return
     }
     else{
-        console.log('PLayer has everything wrong')
-        const playerResult = {
-            time: answer.time,
-            points: 0,
-            input:{
-                artist: answer.artist,
-                song: answer.song
-            }
-        }
+        playerResult.points = 0
         console.log('Answer is emitting to Server', playerResult.points)
         socket.emit('answer', playerResult) 
     }
