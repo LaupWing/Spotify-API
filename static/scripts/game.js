@@ -160,13 +160,18 @@ function startTrack(){
 }
 
 function endOfTrack(){
-    document.querySelector('audio').pause()
-    document.querySelector('main .track_guess svg#play_btn').classList.add('pause_animation')
-    document.querySelector('main .track_guess svg#play_btn_arrow #Playbutton').classList.add('transparent')
-    document.querySelector('main .track_guess .readyMsg').classList.remove('start', 'invisible')
-    document.querySelector('main .track_guess .readyMsg').removeEventListener('animationend', startTrack)
-    document.querySelector('main .track_guess .readyMsg').classList.add('start15')
-    document.querySelector('main .track_guess .readyMsg').addEventListener('animationend', endOfTrackBridge)
+    const audio = document.querySelector('audio')
+    const svg_playBtn = document.querySelector('main .track_guess svg#play_btn')
+    const svg_playBtn_Arrow = document.querySelector('main .track_guess svg#play_btn_arrow #Playbutton')
+    const readyMsg =document.querySelector('main .track_guess .readyMsg')
+     
+    audio.pause()
+    svg_playBtn.classList.add('pause_animation')
+    svg_playBtn_Arrow.classList.add('transparent')
+    readyMsg.classList.remove('start', 'invisible')
+    readyMsg.removeEventListener('animationend', startTrack)
+    readyMsg.classList.add('start15')
+    readyMsg.addEventListener('animationend', endOfTrackBridge)
 }
 
 function endOfTrackBridge(){
@@ -175,11 +180,16 @@ function endOfTrackBridge(){
 }
 
 function timeEnded(){
-    document.querySelector('main #time_is_up').classList.add('visible')
-    document.querySelector('main svg #innerOutline').classList.add('pause_animation')
-    document.querySelector('main #time_is_up h2').classList.add('start')
-    document.querySelector('main #time_is_up p:first-of-type').classList.add('start')
-    document.querySelector('main #time_is_up p:first-of-type').addEventListener('animationend', revealTrack)
+    const time_is_up = document.querySelector('main #time_is_up')
+    const time_is_up_h2 = document.querySelector('main #time_is_up h2') 
+    const innerOutline = document.querySelector('main svg #innerOutline')
+    const time_is_up_p =document.querySelector('main #time_is_up p:first-of-type') 
+
+    time_is_up_h2.classList.add('start')
+    time_is_up_p.classList.add('start')
+    time_is_up_p.addEventListener('animationend', revealTrack)
+    time_is_up.classList.add('visible')
+    innerOutline.classList.add('pause_animation')
 }
 
 function revealTrack(){
