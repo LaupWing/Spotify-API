@@ -60,12 +60,32 @@ The user needs to login via OAuth with Spotify
 ### Waiting Room
 This is the waiting room before the game starts. All the players that wants to play the game need to collect in the waiting room. For the game the to start all the players in the room needs to click on ready.
 1.  Server request data from the spotify api with the acces token. The server asks for the users data an playlist data.
-2.  Api approved the requests and sends the data that has been requested
+2.  Api approved the requests and sends the data that has been requested. All the data will be stored in the server until the client asks for some or all of the data.
 3.  Client scripts sends automatic a socket event called `logged in`
 4.  Server reacts at the event `logged in` with a io.emit event called `fill waiting room`
 5.  If an player clicks the ready btn an socket event will be triggerd called ready `ready`. If all the players has clicked ready the server will send an io.emit event called `start game`
 ![Data Flow](README_images/Dataflow/waitingRoom.png)
 
+<summary>Unformatted Requested Data from Spotify</summary>
+
+![Data Flow](README_images/Dataflow/Data.png)
+
+Formated data will look like this:
+```js
+user    =   {
+                socketId,
+                name,
+                imageUrl
+            }
+
+playlist =  {
+                preview_url,
+                artist,
+                albumImg,
+                songName
+            }
+```
+</details>
 
 ## Game Instructions
 Here you can find the instructions of the application from start to end
@@ -83,7 +103,7 @@ When every player in the waiting room has clicked on the `IM READY` button then 
 
 After the preview of the track the user gets 15s to guess the artist name and the song name of te track. After the 15s the track will be revealed and the user cant give his/her answwer anymore. And the results will be displayed right after the reveal. Every track that was played untill now will be displayed on the rightside of the interface
 ![Data Flow](README_images/RevealTrack.gif)
-
+<details>
 
 #### Points System
 | Points | Guessed |
