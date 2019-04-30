@@ -66,17 +66,18 @@ This is the waiting room before the game starts. All the players that wants to p
 5.  If an player clicks the ready btn an socket event will be triggerd called ready `ready`. If all the players has clicked ready the server will send an io.emit event called `start game`
 ![Data Flow](README_images/Dataflow/waitingRoom.png)
 
+<details>
 <summary>Unformatted Requested Data from Spotify</summary>
 
 ![Data Flow](README_images/Dataflow/Data.png)
 
 Formated data will look like this:
 ```js
-user    =   {
-                socketId,
-                name,
-                imageUrl
-            }
+user     =   {
+                 socketId,
+                 name,
+                 imageUrl
+             }
 
 playlist =  {
                 preview_url,
@@ -103,7 +104,6 @@ When every player in the waiting room has clicked on the `IM READY` button then 
 
 After the preview of the track the user gets 15s to guess the artist name and the song name of te track. After the 15s the track will be revealed and the user cant give his/her answwer anymore. And the results will be displayed right after the reveal. Every track that was played untill now will be displayed on the rightside of the interface
 ![Data Flow](README_images/RevealTrack.gif)
-<details>
 
 #### Points System
 | Points | Guessed |
