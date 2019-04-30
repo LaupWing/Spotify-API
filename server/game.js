@@ -1,12 +1,12 @@
-const express = require("express")
-const router = express.Router()
-let users = []
-let playersReadyArray =[]
-let emittingArray = []
-let answers = []
-const {getData} = require('./helper')
-const {getRandom} = require('./helper')
-const {onlyUnique} = require('./helper')
+const express         = require("express")
+const router          = express.Router()
+let users             = []
+let playersReadyArray = []
+let emittingArray     = []
+let answers           = []
+const {getData}       = require('./helper')
+const {getRandom}     = require('./helper')
+const {onlyUnique}    = require('./helper')
 
 
 router.get('/', async(req,res)=>{

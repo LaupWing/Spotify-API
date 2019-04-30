@@ -47,7 +47,24 @@ I use the Spotify to get the following data:
 In order to get data from the api the user has to grant acces to their spotify account's data. This will be done through OAuth. After the user has logged in via Spofity, the server will receive an acces token. This token is needed in order to fetch data form the Spotify Api
 
 ## Data flow
-![Data Flow](README_images/dataflow2.png)
+
+### OAuth
+The user needs to login via OAuth with Spotify
+1.  User requests website
+2.  Server respond with a static html page which have a login button where the user will be redirected to the spotify login page (for authenitication)
+3.  Spotify server sends login page.
+4.  User gives persmission by loggin in with his/her credentials in the spotify website
+5.  The acces token will be sended via a post method to the server. The acces token will be saved in the session storage
+![Data Flow](README_images/Dataflow/OAuth.png)
+
+### Waiting Room
+This is the waiting room before the game starts. All the players that wants to play the game need to collect in the waiting room. For the game the to start all the players in the room needs to click on ready.
+1.  Server request data from the spotify api with the acces token. The server asks for the users data an playlist data.
+2.  Api approved the requests and sends the data that has been requested
+3.  Client scripts sends automatic a socket event called `logged in`
+4.  Server reacts at the event `logged in` with a io.emit event called `fill waiting room`
+5.  If an player clicks the ready btn an socket event will be triggerd called ready `ready`. If all the players has clicked ready the server will send an io.emit event called `start game`
+![Data Flow](README_images/Dataflow/waitingRoom.png)
 
 
 ## Game Instructions
