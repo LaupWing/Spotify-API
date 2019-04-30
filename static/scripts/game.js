@@ -161,18 +161,18 @@ function setTrackRevealEl(track){
 }
 
 function setTrackListEl(track){
-    const list          = document.querySelector('#track_list')
-    const container     = document.createElement('div')
+    const list      = document.querySelector('#track_list')
+    const container = document.createElement('div')
     container.classList.add('track_container', 'start')
-    const info          = document.createElement('div')
+    const info      = document.createElement('div')
     info.classList.add('info_container')
-    const media         = document.createElement('div')
+    const media     = document.createElement('div')
     media.classList.add('media_container')
-    const img           = document.createElement('img')
-    const artist        = document.createElement('h3')
-    const song          = document.createElement('p')
-    const audio         = document.createElement('audio')
-    const source        = document.createElement('source')
+    const img       = document.createElement('img')
+    const artist    = document.createElement('h3')
+    const song      = document.createElement('p')
+    const audio     = document.createElement('audio')
+    const source    = document.createElement('source')
 
     img.src = track.albumImg
     source.setAttribute('src', track.preview_url);
@@ -194,9 +194,9 @@ function setTrackListEl(track){
 }
 
 function createAudioElement(src){
-    const audio     = document.createElement('audio');
-    const source    = document.createElement('source');
-    const media     = document.getElementById('media');
+    const audio  = document.createElement('audio');
+    const source = document.createElement('source');
+    const media  = document.getElementById('media');
     media.appendChild(audio);
     audio.appendChild(source);
     source.setAttribute('src', src);
@@ -223,13 +223,13 @@ function startTimer(){
 // Start the track
 function startTrack(){
     // Start Track
-    const container     = document.querySelector('main .track_guess')
-    const h2            = container.querySelector('h2')
-    const readyMsg      = container.querySelector('.readyMsg')
-    const playArrow     = container.querySelector('svg#play_btn_arrow #Playbutton')
-    const playBtn       = container.querySelector('svg#play_btn')
-    const audio         = document.querySelector('audio')
-    const audio_time    = container.querySelector('.audio_time')
+    const container  = document.querySelector('main .track_guess')
+    const h2         = container.querySelector('h2')
+    const readyMsg   = container.querySelector('.readyMsg')
+    const playArrow  = container.querySelector('svg#play_btn_arrow #Playbutton')
+    const playBtn    = container.querySelector('svg#play_btn')
+    const audio      = document.querySelector('audio')
+    const audio_time = container.querySelector('.audio_time')
 
     h2.innerText = 'Guess the track'
     readyMsg.classList.add('invisible')
@@ -364,11 +364,12 @@ function playersAnswer(){
 }
 
 function userDoesntKnow(name){
+    console.log(name)
     console.log('Server has send the name')
     if(flag){
         flag = false
-        artist = name
-        song = 'I dont know this track'
+        const artist = name
+        const song = 'I dont know this track'
         const answer = {
             time,
             artist,
@@ -476,12 +477,14 @@ function setFormItems(setting){
 
 
 function compareAnswerToSolution(answer){
-    const artist_name           = document.querySelector('h2.artist_name').innerText
-    const song_name             = document.querySelector('p.song_name').innerText
-    const formatted_song_name   = replaceSomeChar(sliceOutPandD(song_name))
-    const formatted_artist_name = replaceSomeChar(sliceAfterComma(sliceOutPandD(artist_name)))
-    const song_name_correct     = formatted_song_name==answer.song.toLowerCase()
-    const artist_name_correct   = formatted_artist_name == answer.artist.toLowerCase()
+    const artist_name            = document.querySelector('h2.artist_name').innerText
+    const song_name              = document.querySelector('p.song_name').innerText
+    const formatted_song_name    = replaceSomeChar(sliceOutPandD(song_name))
+    const formatted_artist_name  = replaceSomeChar(sliceAfterComma(sliceOutPandD(artist_name)))
+    const formatted_artist_guess = replaceSomeChar(sliceAfterComma(sliceOutPandD(answer.artist)))    
+    const formatted_song_guess   = replaceSomeChar(sliceAfterComma(sliceOutPandD(answer.song)))
+    const song_name_correct      = formatted_song_name   == formatted_song_guess
+    const artist_name_correct    = formatted_artist_name == formatted_artist_guess
     const playerResult = {
         time: answer.time,
         input:{
@@ -490,8 +493,8 @@ function compareAnswerToSolution(answer){
         }
     }
     if(song_name_correct && artist_name_correct){
-        console.log('Answer is emitting to Server', playerResult.points)
         playerResult.points = 1000
+        console.log('Answer is emitting to Server', playerResult.points)
         socket.emit('answer', playerResult)
         return
     }

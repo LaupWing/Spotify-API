@@ -81,3 +81,5 @@ After the preview of the track the user gets 15s to guess the artist name and th
 - [ ] Better answer comparison system (Dont count the space as answer)
 - [ ] Handle the buggs (sometimes a weird bug occures)
 - [ ] Mobile responsive
+- [ ] Dynamically load playlist(player can choose)
+- [ ] Settings for room (time etc.)
