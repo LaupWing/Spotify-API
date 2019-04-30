@@ -7,7 +7,7 @@ function replaceSomeChar(string){
     return result.join('').toLowerCase().trim()
 }
 function sliceOutPandD(string){
-    const index = string.indexOf('(')
+    const index  = string.indexOf('(')
     const index2 = string.indexOf('-')
     if(index !== -1)    return string.slice(0, index).trim()
     if(index2 !== -1)   return string.slice(0, index2).trim()
@@ -23,13 +23,16 @@ function sliceAfterComma(string){
 function addingUsersToUL(ul, array){
     removeElements(ul)
     array.forEach(user=>{
-        const li = document.createElement('li')
-        li.id = user.socketId
-        const img = document.createElement('img')
-        img.src = user.imageUrl
-        const h2 = document.createElement('h2')
+        const li     = document.createElement('li')
+        li.id        = user.socketId
+
+        const img    = document.createElement('img')
+        img.src      = user.imageUrl
+
+        const h2     = document.createElement('h2')
         h2.innerText = user.name
-        const div = document.createElement('div')
+        
+        const div    = document.createElement('div')
         div.appendChild(h2)
         li.appendChild(img)
         li.appendChild(div)
