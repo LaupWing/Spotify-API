@@ -7,8 +7,10 @@ A game which the players have guess the song. The first person who has guessed t
 * [Installing](#installing-)
 * [First Drawning](#first-drawning-)
 * [API](#api-)
+    * [OAuth Api](#oauth-api)
+* [Data Flow](#data-flow)
     * [OAuth](#oauth)
-    * [Data Flow](#data-flow)
+    * [Waiting Room](#waiting-room)
 * [Game Instructions](#game-instructions-)
     * [Begin Screen](#begin-screen)
     * [Waiting room](#waiting-room)
@@ -43,10 +45,14 @@ I use the Spotify to get the following data:
     * Users Name
     * Users Profile picture
 
-### OAuth
+### OAuth Api
 In order to get data from the api the user has to grant acces to their spotify account's data. This will be done through OAuth. After the user has logged in via Spofity, the server will receive an acces token. This token is needed in order to fetch data form the Spotify Api
 
 ## Data flow
+The data flow of this applications is been split into three parts:
+*   OAuth
+*   Waiting Room
+*   Game
 
 ### OAuth
 The user needs to login via OAuth with Spotify
@@ -67,8 +73,9 @@ This is the waiting room before the game starts. All the players that wants to p
 ![Data Flow](README_images/Dataflow/waitingRoom.png)
 
 <details>
-<summary>Unformatted Requested Data from Spotify</summary>
+<summary>Click here to see the data that we get from Spotify</summary>
 
+Unformatted Requested Data from Spotify
 ![Data Flow](README_images/Dataflow/Data.png)
 
 Formated data will look like this:
@@ -87,6 +94,9 @@ playlist =  {
             }
 ```
 </details>
+
+### Game
+In the game screen all the data has been stored in the server so it isnt realy usefull to make a diagram of the data flow in this state of the application. So thats why i have made a script flow instead, to see how the application runs with all the functions inside.
 
 ## Game Instructions
 Here you can find the instructions of the application from start to end

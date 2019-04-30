@@ -234,7 +234,7 @@ main svg{
 }
 main #results{
     width: 50%;
-    background: #1DB954;
+    background: rgba(0,0,0,.9);
     position: absolute;
     z-index: 1000000;
     left: 0;
@@ -245,6 +245,21 @@ main #results{
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+main #results div{
+    color: white;
+    width: 100%;
+    padding: 10px;
+}
+main #results div h2{
+    font-size: 18px;
+}
+main #results div p{
+    font-size: 14px;
+}
+main #results div p span,
+main #results div h2 span{
+    color: #1DB954;
 }
 main svg#Face{
     z-index: 3000;

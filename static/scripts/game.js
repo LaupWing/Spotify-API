@@ -411,16 +411,19 @@ function renderingResults(results){
     results = Array.from(results)
     const container = document.getElementById('results')
     results.forEach(result=>{
-        const div      = document.createElement('div')
-        const h2       = document.createElement('h2')
-        const p        = document.createElement('p')
-        const p2       = document.createElement('p')
-        h2.textContent = result.name
-        p.textContent  = `${result.answer.input.artist} - ${result.answer.input.song}  time: ${result.answer.time}`
-        p2.textContent = result.answer.points
+        const div        = document.createElement('div')
+        const h2         = document.createElement('h2')
+        const artist     = document.createElement('p')
+        const time       = document.createElement('p')
+        const points     = document.createElement('p')
+        h2.textContent   = result.name
+        artist.innerHTML = `<span>Answer:</span> ${result.answer.input.artist} - ${result.answer.input.song}`
+        time.innerHTML   = `<span>Time:</span> ${result.answer.time/10} sec`
+        points.innerHTML = `<span>Points:</span> ${result.answer.points}`
         div.appendChild(h2)
-        div.appendChild(p)
-        div.appendChild(p2)
+        div.appendChild(artist)
+        div.appendChild(time)
+        div.appendChild(points)
         container.insertAdjacentElement('beforeend', div)
         document.querySelectorAll('#users li').forEach(li=>{
             if(li.id === result.id){
