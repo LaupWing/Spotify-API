@@ -313,15 +313,23 @@ function revealResults(){
 }
 
 function nextSong(){
-    document.querySelector('main .track_guess .readyMsg').removeEventListener('animationend', endOfTrackBridge)
-    document.querySelector('main svg#Face').classList.remove('reveal')
-    document.querySelector('main .track_guess h2').innerText = 'Track starting in'
-    document.querySelector('main svg #innerOutline').classList.remove('start','pause_animation')
-    document.querySelector('main .readyMsg').classList.remove('start', 'start15')
-    document.querySelector('main .track_guess svg#play_btn').classList.remove('start', 'pause_animation')
-    document.querySelector('main .track_guess .audio_time').classList.remove('start')
-    removeElements(document.querySelector('#media'))
-    document.querySelector('main svg#Face').addEventListener('transitionend',nextSongBridge)
+    const readyMsg       = document.querySelector('main .track_guess .readyMsg')
+    const svgFace        = document.querySelector('main svg#Face')
+    const track_guess_h2 = document.querySelector('main .track_guess h2')
+    const innerOutline   = document.querySelector('main svg #innerOutline') 
+    const playBtn        = document.querySelector('main .track_guess svg#play_btn')
+    const audio_time     = document.querySelector('main .track_guess .audio_time')
+    const audio          = document.querySelector('#media') 
+
+    readyMsg.removeEventListener('animationend', endOfTrackBridge)
+    svgFace.classList.remove('reveal')
+    track_guess_h2.innerText = 'Track starting in'
+    innerOutline.classList.remove('start','pause_animation')
+    readyMsg.classList.remove('start', 'start15')
+    playBtn.classList.remove('start', 'pause_animation')
+    audio_time.classList.remove('start')
+    removeElements(audio)
+    svgFace.addEventListener('transitionend',nextSongBridge)
 }
 
 function resetTimer(){
@@ -369,7 +377,7 @@ function userDoesntKnow(name){
     if(flag){
         flag = false
         const artist = name
-        const song = 'I dont know this track'
+        const song   = 'I dont know this track'
         const answer = {
             time,
             artist,
@@ -403,13 +411,13 @@ function renderingResults(results){
     results = Array.from(results)
     const container = document.getElementById('results')
     results.forEach(result=>{
-        const div   = document.createElement('div')
-        const h2    = document.createElement('h2')
-        const p     = document.createElement('p')
-        const p2    = document.createElement('p')
-        h2.textContent  = result.name
-        p.textContent   = `${result.answer.input.artist} - ${result.answer.input.song}  time: ${result.answer.time}`
-        p2.textContent  = result.answer.points
+        const div      = document.createElement('div')
+        const h2       = document.createElement('h2')
+        const p        = document.createElement('p')
+        const p2       = document.createElement('p')
+        h2.textContent = result.name
+        p.textContent  = `${result.answer.input.artist} - ${result.answer.input.song}  time: ${result.answer.time}`
+        p2.textContent = result.answer.points
         div.appendChild(h2)
         div.appendChild(p)
         div.appendChild(p2)
