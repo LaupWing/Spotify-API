@@ -130,3 +130,4 @@ After the preview of the track the user gets 15s to guess the artist name and th
 - [ ] Mobile responsive
 - [ ] Dynamically load playlist(player can choose)
 - [ ] Settings for room (time etc.)
+- [ ] Put more comments
