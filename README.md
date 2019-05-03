@@ -113,6 +113,12 @@ When every player in the waiting room has clicked on the `IM READY` button then 
 ![Data Flow](README_images/GameCountdown.gif)
 
 After the preview of the track the user gets 15s to guess the artist name and the song name of te track. After the 15s the track will be revealed and the user cant give his/her answwer anymore. And the results will be displayed right after the reveal. Every track that was played untill now will be displayed on the rightside of the interface
+
+The answer will be compared without spaces and special characters. These are the special characters that will be ignored
+```js
+const allChar = ['(', ')', '.', '!', '*', ' ', ',']
+```
+
 ![Data Flow](README_images/RevealTrack.gif)
 
 #### Points System
