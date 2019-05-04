@@ -137,3 +137,4 @@ const allChar = ['(', ')', '.', '!', '*', ' ', ',']
 - [ ] Dynamically load playlist(player can choose)
 - [ ] Settings for room (time etc.)
 - [ ] Put more comments
+- [ ] Functions WireFlow maken
