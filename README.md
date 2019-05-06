@@ -37,6 +37,7 @@ This is my first drawning of the application. The drawning is a the actual game 
 For this application i have used the Spotify API.
 
 I use the Spotify to get the following data:
+
 * Track:
     * Artist-Name
     * Song-Name
