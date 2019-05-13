@@ -139,3 +139,4 @@ const allChar = ['(', ')', '.', '!', '*', ' ', ',']
 - [ ] Settings for room (time etc.)
 - [ ] Put more comments
 - [ ] Functions WireFlow maken
+- [ ] Rubriek bekijken
