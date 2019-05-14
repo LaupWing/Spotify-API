@@ -2,7 +2,7 @@ const express = require('express')
 const request = require('request')
 const querystring = require('querystring')
 const router = express.Router()
-require("dotenv/config")
+// require("dotenv/config")
 
 
 let redirect_uri = 
