@@ -140,3 +140,4 @@ const allChar = ['(', ')', '.', '!', '*', ' ', ',']
 - [ ] Put more comments
 - [ ] Functions WireFlow maken
 - [ ] Rubriek bekijken
+- [ ] Rubriek aanvulling geven.
