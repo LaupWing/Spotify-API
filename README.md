@@ -139,5 +139,5 @@ const allChar = ['(', ')', '.', '!', '*', ' ', ',']
 - [ ] Settings for room (time etc.)
 - [ ] Put more comments
 - [ ] Functions WireFlow maken
-- [ ] Rubriek bekijken
-- [ ] Rubriek aanvulling geven.
+- [x] Rubriek bekijken
+- [x] Rubriek aanvulling geven.

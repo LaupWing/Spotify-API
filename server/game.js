@@ -8,8 +8,8 @@ const {getData}       = require('./helper')
 const {getRandom}     = require('./helper')
 const {onlyUnique}    = require('./helper')
 
-
 router.get('/', async(req,res)=>{
+    
     const io = req.app.get('socketio')
     let socket_id = []
 
@@ -29,9 +29,9 @@ router.get('/', async(req,res)=>{
     const image = await getData({
         endpoint        :   'me',
         acces_token     :   req.session.acces_token,
-        output          :   'images'
-        
+        output          :   'images' 
     })
+
     req.session.data = tracks
         .filter(allTracks=>allTracks.track.preview_url !== null)
         .map((filteredTracks)=>{
@@ -50,16 +50,18 @@ router.get('/', async(req,res)=>{
             name,
             imageUrl: image[0].url
         })
+        console.log(users)
         io.emit('fill waiting room', onlyUnique('socketId',users))
         // socket.emit('user indicator', socket.id)
     }
 
     function playerHasDisconnected(socket_id){
-        console.log(`User with id ${socket_id} had disconnected`)
+        console.log(`User with id ${socket_id} had disconnected /`)
         const filterOut = onlyUnique('socketId',users)
             .filter(user=>user.socketId !== socket_id)
         users = filterOut
         playersReadyArray = playersReadyArray.filter(id=>id!==socket_id)
+        console.log('ALL THE USERS IN THIS GAME:',users)
         io.emit('users', filterOut)
     }
 
@@ -113,8 +115,6 @@ router.get('/', async(req,res)=>{
     }
     
     function renderingResults(){
-        console.log(answers.length, users.length)
-        console.log(answers)
         if(answers.length === users.length){
             console.log('emitting results')
             emittingArray = []
@@ -132,6 +132,7 @@ router.get('/', async(req,res)=>{
         if(socket_id[0] === socket.id){
             io.removeAllListeners('connection')
         }
+
         // All the custom socket events
         socket.on('logged in',()=>newPlayerLoggedIn(socket.id))
         socket.on('disconnect', ()=>playerHasDisconnected(socket.id))
