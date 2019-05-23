@@ -1,6 +1,8 @@
 # Spotify Game
 A game which the players have guess the song. The first person who has guessed the song wins the most points. Every track will be played for roughly 5 seconds. After that the players have 15 seconds to guess the artist name and song name of the track that has played. The games play's 10 songs till the game is finished. 
 
+Link: https://spotifygame.herokuapp.com/
+
 ![Real Time Web Screenshot](README_images/gimma.png)
 
 ## Table of Contents
