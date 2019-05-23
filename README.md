@@ -9,6 +9,7 @@ A game which the players have guess the song. The first person who has guessed t
 * [API](#api-)
     * [OAuth Api](#oauth-api)
 * [Data Flow](#data-flow)
+    * [Data Flow Diagram](#data-flow-diagram)
     * [OAuth](#oauth)
     * [Waiting Room](#waiting-room)
 * [Game Instructions](#game-instructions-)
@@ -50,6 +51,8 @@ I use the Spotify to get the following data:
 In order to get data from the api the user has to grant acces to their spotify account's data. This will be done through OAuth. After the user has logged in via Spofity, the server will receive an acces token. This token is needed in order to fetch data form the Spotify Api
 
 ## Data flow
+### Data Flow Diagram
+![Data Flow](README_images/Dataflow/data_lifecyclus.png)
 The data flow of this applications is been split into three parts:
 *   OAuth
 *   Waiting Room
